@@ -16,7 +16,7 @@
 
     <div class="container">
         <h1 class="mt-4 mb-4">Plant Watering App</h1>
-        
+
         <!-- Add Plant Form -->
         <div class="card mb-4">
             <div class="card-header">
@@ -60,7 +60,10 @@
 
     <!-- WebSocket script to display notifications -->
     <script>
-        const ws = new WebSocket('ws://localhost:3000'); // WebSocket server address
+        // Use the current host and protocol to connect to the WebSocket server
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsHost = window.location.host;
+        const ws = new WebSocket(`${wsProtocol}${wsHost}`);
         ws.onmessage = function (event) {
             const data = JSON.parse(event.data);
             if (data.type === 'notification') {
