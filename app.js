@@ -131,3 +131,20 @@ server.on('upgrade', (request, socket, head) => {
 
 // Schedule cron jobs for existing plants
 scheduleCronJobs();
+
+// Logging for WebSocket server
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+
+  ws.on('message', (message) => {
+    console.log(`Received message from client: ${message}`);
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+
+  ws.on('error', (error) => {
+    console.error('WebSocket error:', error);
+  });
+});
