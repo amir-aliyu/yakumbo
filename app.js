@@ -7,6 +7,29 @@ const {
 } = require('uuid'); // Import uuidv4 from uuid library
 const WebSocket = require('ws'); // Import WebSocket library
 const cron = require('node-cron'); // Import node-cron library
+require('dotenv').config(); // Import dotenv library
+
+// MongoDB
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = process.env.ATLAS_URI;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri);
+
+async function run() {
+  try {
+	// Connect the client to the server    (optional starting in v4.7)
+	await client.connect();
+	// Send a ping to confirm a successful connection
+	await client.db("admin").command({ ping: 1 });
+	console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+	// Ensures that the client will close when you finish/error
+	await client.close();
+  }
+}
+run().catch(console.dir);
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -50,6 +73,9 @@ app.post('/add-plant', (req, res) => {
     wateringTime
   } = req.body;
   const plantId = uuidv4();
+
+  addPlant(name, wateringTime); // Add plant to MongoDB (async function)
+
   plants.push({
     id: plantId,
     name,
@@ -115,6 +141,23 @@ function scheduleCronJobs() {
     });
     cronJobs.push(job);
   });
+}
+
+// Function to add plant to MongoDB
+async function addPlant(plantName, wateringTime) {
+  try {
+    await client.connect();
+    const database = client.db("Master_Database");
+    const collection = database.collection("Test_User");
+    const plant = {
+      name: plantName,
+      wateringTime: wateringTime
+    };
+    const result = await collection.insertOne(plant);
+    console.log(`New plant added with the following id: ${result.insertedId}`);
+  } finally {
+    await client.close();
+  }
 }
 
 // Create HTTP server
