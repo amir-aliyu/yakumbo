@@ -30,11 +30,13 @@ function displayNotification(message, type) {
 document.getElementById('addPlantForm').addEventListener('submit', async function (event) {
     event.preventDefault();
     const plantName = document.getElementById('plantName').value;
+    const plantType = document.getElementById('plantType').value;
     const wateringTime = document.getElementById('wateringTime').value;
 
     try {
         const response = await axios.post('/add-plant', {
-            name: plantName,
+            plantName: plantName,
+            plantType: plantType,
             wateringTime: wateringTime
         });
         if (response.data.message) {
