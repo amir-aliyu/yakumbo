@@ -85,7 +85,7 @@ async function fetchPlants() {
             plantItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
             plantItem.textContent = `${plant.name} - Watering Time: ${plant.wateringTime}s`;
 
-            const deleteBtn = createDeleteButton(plant.id); // Use the unique ID from the backend
+            const deleteBtn = createDeleteButton(plant._id); // Use the unique ID from the backend
             plantItem.appendChild(deleteBtn);
 
             plantsList.appendChild(plantItem);

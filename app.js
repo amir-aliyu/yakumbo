@@ -11,6 +11,7 @@ require('dotenv').config(); // Import dotenv library
 
 // MongoDB
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 const uri = process.env.ATLAS_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -18,14 +19,13 @@ const client = new MongoClient(uri);
 
 async function run() {
     try {
-        // Connect the client to the server    (optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
-        } finally {
+    } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        // await client.close();
     }
 }
 run().catch(console.dir);
@@ -63,7 +63,8 @@ app.get('/style.css', (req, res) => {
 });
 
 // Example database in memory (will be replaced with a real database, probably MongoDB Atlas?)
-let plants = [];
+// Hehe I'm using MongoDB Atlas
+// let plants = [];
 let cronJobs = [];
 
 // Endpoint to add a plant
@@ -73,51 +74,52 @@ app.post('/add-plant', (req, res) => {
         plantType,
         wateringTime
     } = req.body;
-    const plantId = uuidv4();
 
-    addPlantToDB(plantName, plantType, wateringTime); // Add plant to MongoDB (async function)
+    addPlantToDB(plantName, plantType, wateringTime).then((plantId) => {
+        scheduleCronJobs(); // Update cron jobs after adding a plant
 
-    plants.push({
-        id: plantId,
-        name,
-        wateringTime
-    });
+        // Notify connected clients about the new plant
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+            // client.send(JSON.stringify({
+            //   type: 'notification',
+            //   message: `New plant added to server: ${name}`
+            // }));
+            }
+        });
 
-    // Notify connected clients about the new plant
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-        // client.send(JSON.stringify({
-        //   type: 'notification',
-        //   message: `New plant added to server: ${name}`
-        // }));
-        }
-    });
-    scheduleCronJobs(); // Update cron jobs after adding a plant
-    res.json({
-        message: `Plant "${plantName}" (${plantType}) added successfully with ID ${plantId}`
+        res.json({
+            message: `Plant "${plantName}" (${plantType}) added successfully with ID ${plantId}`
+        });
     });
 });
 
 // Endpoint to get all plants
 app.get('/get-plants', (req, res) => {
-    res.json(plants);
+    // Get plants from MongoDB (async function)
+    getPlantsFromDB().then((plants) => {
+        res.json(plants);
+    });
+    // res.json(getPlantsFromDB());
 });
 
 // Endpoint to delete a plant by ID
 app.delete('/delete-plant/:id', (req, res) => {
     const plantId = req.params.id;
-    const index = plants.findIndex((plant) => plant.id === plantId);
-    if (index !== -1) {
-        plants.splice(index, 1);
-        scheduleCronJobs(); // Update cron jobs after adding a plant
-        res.json({
-        message: 'Plant deleted successfully'
-        });
-    } else {
-        res.status(404).json({
-        error: 'Plant not found'
-        });
-    }
+
+    deletePlantFromDB(plantId).then((numDeleted) => {
+        if (numDeleted == 1) {
+            scheduleCronJobs(); // Update cron jobs after adding a plant
+            res.json({
+                message: 'Plant deleted successfully'
+            });
+        } else if (numDeleted == 0){
+            res.status(404).json({
+            error: 'Plant not found'
+            });
+        }
+    });
+
 });
 
 // Function to schedule cron jobs based on plant data
@@ -125,6 +127,7 @@ function scheduleCronJobs() {
     // Cancel existing cron jobs
     cronJobs.forEach((job) => job.stop());
     cronJobs = [];
+    const plants = Array.from(getPlantsFromDB()); // Get plants from MongoDB (async function)
 
     // Schedule notifications for each plant (in seconds)
     plants.forEach((plant) => {
@@ -147,7 +150,6 @@ function scheduleCronJobs() {
 // Function to add plant to MongoDB
 async function addPlantToDB(plantName, plantType, wateringTime) {
     try {
-        await client.connect();
         const database = client.db("Master_Database");
         const collection = database.collection("Test_User");
         const plant = {
@@ -157,22 +159,41 @@ async function addPlantToDB(plantName, plantType, wateringTime) {
         };
         const result = await collection.insertOne(plant);
         console.log(`New plant added with the following id: ${result.insertedId}`);
+        return result.insertedId;
     } finally {
-        await client.close();
     }
 }
 
+// Function to get plants as an array from MongoDB
 async function getPlantsFromDB() {
+    let plants = [];
     try {
-        await client.connect();
+        // Currently no separate users, only one collection
         const database = client.db("Master_Database");
         const collection = database.collection("Test_User");
         const query = {};
-        const plants = await collection.find(query).toArray();
+        plants = await collection.find(query).toArray();
     } finally {
-        await client.close();
     }
     return plants;
+}
+
+// Function to delete a plant from MongoDB
+async function deletePlantFromDB(plantId) {
+    try {
+        const database = client.db("Master_Database");
+        const collection = database.collection("Test_User");
+        const query = {"_id": new ObjectId(plantId)};
+        const result = await collection.deleteOne(query);
+        if (result.deletedCount == 1) {
+            console.log(`Deleted plant with the following id: ${plantId}`);
+        } else {
+            console.log(`No plant found with the following id: ${plantId}`);
+        }
+        return result.deletedCount;
+    } catch (error){
+        console.error('Error deleting plant:', error);
+    }
 }
 
 // Create HTTP server
