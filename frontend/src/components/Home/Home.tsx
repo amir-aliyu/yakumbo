@@ -15,17 +15,17 @@ const Home: FC<HomeProps> = () => (
 		<div className="card-body">
 			<form id="addPlantForm">
 				<div className="form-group">
-					<label for="plantName">Plant Name:</label>
+					<label htmlFor="plantName">Plant Name:</label>
 					<input type="text" className="form-control mt-2" id="plantName" placeholder="Enter plant name"
 						required/>
 				</div>
 				<div className="form-group mt-2">
-					<label for="plantType">Plant Type:</label>
+					<label htmlFor="plantType">Plant Type:</label>
 					<input type="text" className="form-control mt-2" id="plantType" placeholder="Enter plant type"
 						required/>
 				</div>
 				<div className="form-group mt-2">
-					<label for="wateringTime">Watering Time (in seconds):</label>
+					<label htmlFor="wateringTime">Watering Time (in seconds):</label>
 					<input type="number" className="form-control mt-2" id="wateringTime"
 						placeholder="Enter watering time" required/>
 				</div>
