@@ -3,13 +3,9 @@ import './App.css';
 
 function App() {
 	return (
-		<div className="App">
-			<head>
-				<title>Plant Project WebApp</title>
-			</head>
-			<body>
-				<Home/>
-			</body>
+		<div>
+			<title>Plant Project WebApp</title>
+			<Home/>
 		</div>
 	);
 }
