@@ -9,4 +9,5 @@ Start by cloning the repository to a folder on your computer. Then, navigate ins
 ## Using Fronend
 Commands:  
 `cd frontend`  
+`nodemon scripts/app.js`  
 `npm start`  
