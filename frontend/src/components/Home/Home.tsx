@@ -125,28 +125,59 @@ const Home: FC<HomeProps> = () => {
         </div>
       </div>
 
-      {/* Notifications */}
-      <div id="notifications"></div>
-
-      {/* Plant List */}
-      <div className="card mt-4">
-        <div className="card-header">Plants List</div>
-        <div className="card-body">
-          <ul id="plantsList" className="list-group">
-            {plants.map((plant: any) => (
-              <li key={plant._id} className="list-group-item d-flex justify-content-between align-items-center">
-                {plant.name} - Watering Time: {plant.wateringTime}s
-                <button
-                  className="btn btn-danger btn-sm ml-2"
-                  onClick={() => deletePlant(plant._id)}
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
+{/* Plant List */}
+<div className="card mt-4">
+  <div className="card-header">Plants List</div>
+  <div className="card-body">
+    <ul id="plantsList" className="list-group">
+      {/* Header Row */}
+      <li className="list-group-item">
+        <div className="row">
+          <div className="col fw-bold">Name</div>
+          <div className="col fw-bold">Type</div>
+          <div className="col fw-bold">Watering Time</div>
+          <div className="col fw-bold text-end">Actions</div> {/* Right-aligned header */}
         </div>
-      </div>
+      </li>
+      {/* Plant Items */}
+      {plants.map((plant: any) => (
+        <li key={plant._id} className="list-group-item">
+          <div className="row">
+            <div className="col">
+              {plant.name}
+            </div>
+            <div className="col">
+              {plant.type}
+            </div>
+            <div className="col">
+              {plant.wateringTime}s
+            </div>
+            <div className="col text-end">
+              <button
+                className="btn btn-info btn-sm me-2"
+                style={{ width: '75px' }}
+                onClick={() => deletePlant(plant._id)}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                style={{ width: '75px' }}
+                onClick={() => deletePlant(plant._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+
+
+
     </div>
   );
 };
