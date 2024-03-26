@@ -132,15 +132,15 @@ const handleEditPlantClick = async (plantId: string) => {
 
 
     {/* Plant List */}
-    <div className="card mt-4">
-      <div className="card-header fw-bold fs-4 d-flex align-items-center">
-        <p className="m-0">Plant List</p>
-        <button onClick={handleAddPlantClick} className="btn btn-primary ms-auto">Add Plant</button>
+    <div className="card mt-4 shadow">
+      <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
+        <p className="m-0 fs-3">Plant List</p>
+        <button onClick={handleAddPlantClick} className="btn btn-light ms-auto text-dark">Add Plant</button>
       </div>
-      <div className="card-body">
+      <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
         <ul id="plantsList" className="list-group">
           {/* Header Row */}
-          <li className="list-group-item">
+          <li className="list-group-item bg-light">
             <div className="row">
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>

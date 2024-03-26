@@ -51,9 +51,9 @@ const PlantForm: FC<PlantFormProps> = ({ isOpen, onClose, onSubmit, plantData })
       <div className="modal-backdrop"></div>
       {/* Modal Content */}
       <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{plantData ? 'Edit Plant' : 'Add New Plant'}</h5>
+        <div className="modal-content bg-light">
+          <div className="modal-header bg-warning">
+            <h5 className="modal-title">{plantData ? 'Edit Plant' : 'Add a New Plant'}</h5>
             <button type="button" className="btn-close" onClick={handleClose}></button>
           </div>
           <div className="modal-body">
@@ -96,8 +96,8 @@ const PlantForm: FC<PlantFormProps> = ({ isOpen, onClose, onSubmit, plantData })
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary mt-2">
-            {plantData ? 'Edit Plant' : 'Add New Plant'}
+            <button type="submit" className="btn btn-warning mt-2 text-dark">
+              {plantData ? 'Confirm Edit' : 'Add Plant'}
             </button>
             </form>
           </div>
