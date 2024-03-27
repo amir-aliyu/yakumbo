@@ -18,7 +18,6 @@ const Home: FC<HomeProps> = () => {
     console.log('fetching plants')
     try {
       const response = await fetch('/api/plants/');
-      console.log(response)
       const data = await response.json();
       if (response.ok) {
         setPlants(data);
@@ -125,6 +124,35 @@ const handleEditPlantClick = async (plantId: string) => {
     closeModal();
   };
   
+
+  // LOGIC FOR CON JOBS
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:4000/');
+
+    ws.onopen = () => {
+        console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log("WebSocket Message:", message);
+      if (message.type === 'notification') {
+          displayNotification(message.message, 'info');
+      }
+  };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+        console.log('Disconnected from WebSocket server');
+    };
+
+    return () => {
+        ws.close();
+    };
+    }, []);
 
   return (
     <div className="container">

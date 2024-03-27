@@ -30,15 +30,14 @@ async function schedulePlantWateringJobs(wss) {
     // Schedule new jobs
     plants.forEach((plant) => {
         const job = cron.schedule(`*/${plant.wateringTime} * * * * *`, () => {
-            console.log(`Notification: Time to water your ${plant.name}!`)
+            console.log(`------ Notification: Time to water your ${plant.name}!`)
+            console.log(`clients: ${wss.clients.size}`)
             wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
                         type: 'notification',
                         message: `Time to water your ${plant.name}!`
                     }));
                     console.log(`Notification sent for ${plant.name}`);
-                }
             });
         });
 
