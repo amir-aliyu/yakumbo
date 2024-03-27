@@ -1,11 +1,16 @@
-require('dotenv').config()
+const express = require('express');
+const mongoose = require('mongoose');
+const WebSocket = require('ws');
 
-const express = require('express')
-const mongoose = require('mongoose')
-const plantRoutes = require('./routes/plants')
-const PORT = process.env.PORT
+require('dotenv').config();
 
-// express app
+const plantRoutes = require('./routes/plants');
+const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
+
+const PORT = process.env.PORT || 4000;
+const WS_PORT = process.env.WS_PORT || 8080; // WebSocket port
+
+// Express app
 const app = express();
 
 // middleware
@@ -19,14 +24,26 @@ app.use((req, res, next) => {
 app.use('/api/plants', plantRoutes)
 
 // connect to db
-mongoose.connect(process.env.ATLAS_URI)
+mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        // listen for requests
-        app.listen(PORT, () => {
-            console.log(`successfully connected to db`)
-            console.log(`listening on port ${PORT}`)
-        })
+        // Start HTTP server
+        const server = app.listen(PORT, () => {
+            console.log(`Successfully connected to MongoDB`);
+            console.log(`HTTP server listening on port ${PORT}`);
+        });
+
+        // WebSocket server
+        const wss = new WebSocket.Server({ server });
+        wss.on('connection', function connection(ws) {
+            console.log('Client connected to WebSocket');
+            ws.on('message', function incoming(message) {
+                console.log('Received: %s', message);
+            });
+        });
+
+        // Schedule cron jobs for plant watering
+        schedulePlantWateringJobs(wss).catch(console.error);
     })
     .catch((error) => {
-        console.log(error)
-    })
+        console.error('MongoDB connection error:', error);
+    });
