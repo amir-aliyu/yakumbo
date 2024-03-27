@@ -6,11 +6,13 @@ const {
     getPlantById,
     addPlant,
     updatePlantById,
-    deletePlantById
+    deletePlantById,
+    getAllPresetPlants
 } = require('../controllers/plantController');
 
 // GET Requests
 router.get('/', getAllPlants);
+router.get('/presets', getAllPresetPlants);
 router.get('/:id', getPlantById);
 
 // POST Requests
