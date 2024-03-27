@@ -1,10 +1,20 @@
 const Plant = require('../models/plantModel');
-
+const Preset = require('../models/presetModel');
 // Get all plants
 const getAllPlants = async (req, res) => {
     try {
         const plants = await Plant.find();
         res.status(200).json(plants);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Get all preset plants
+const getAllPresetPlants = async (req, res) => {
+    try {
+        const presets = await Preset.find();
+        res.status(200).json(presets);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -65,5 +75,6 @@ module.exports = {
     getPlantById,
     addPlant,
     updatePlantById,
-    deletePlantById
+    deletePlantById,
+    getAllPresetPlants
 };

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const plantSchema = new Schema({
+const presetSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -20,4 +20,5 @@ const plantSchema = new Schema({
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
-module.exports = mongoose.model('Plant', plantSchema);
+
+module.exports = mongoose.model('Preset', presetSchema);

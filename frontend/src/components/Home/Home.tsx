@@ -29,9 +29,26 @@ const Home: FC<HomeProps> = () => {
     }
   }, []);
 
+  const fetchPresetPlants = useCallback(async () => {
+    console.log('fetching preset plants')
+    try {
+      const response = await fetch('/api/plants/presets');
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data);
+      } else {
+        throw new Error(data.message || 'Error fetching presets');
+      }
+    } catch (error: any) {
+      displayNotification('Error fetching presets', 'error');
+    }
+  }, []);
+
   useEffect(() => {
     fetchPlants();
-  }, [fetchPlants]);
+    fetchPresetPlants();
+  }, [fetchPlants, fetchPresetPlants]);
+  
 
   const deletePlant = async (plantId: string) => {
     try {
@@ -125,7 +142,7 @@ const handleEditPlantClick = async (plantId: string) => {
   };
   
 
-  // LOGIC FOR CON JOBS
+  // LOGIC FOR CRON JOBS
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:4000/');
 
