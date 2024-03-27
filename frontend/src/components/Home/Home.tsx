@@ -189,7 +189,6 @@ const handleEditPlantClick = async (plantId: string) => {
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>
               <div className="col fw-bold fs-5">Watering Time</div>
-              <div className="col fw-bold fs-5">Image</div>
               <div className="col fw-bold fs-5 text-end">Actions</div> {/* Right-aligned header */}
             </div>
           </li>
@@ -198,6 +197,8 @@ const handleEditPlantClick = async (plantId: string) => {
             <li key={plant._id} className="list-group-item">
               <div className="row">
                 <div className="col">
+                  {/* NOTE: The base64 string should start with a / */}
+                  <img src={`data:image/png;base64, ${plant.image}`} className={"me-2"} style={{ width: '50px', height: '50px' }} />
                   {plant.name}
                 </div>
                 <div className="col">
@@ -205,10 +206,6 @@ const handleEditPlantClick = async (plantId: string) => {
                 </div>
                 <div className="col">
                   {plant.wateringTime}s
-                </div>
-                <div className="col">
-                  {/* NOTE: The base64 string should start with a / */}
-                  <img src={`data:image/png;base64, ${plant.image}`} style={{ width: '50px', height: '50px' }} />
                 </div>
                 <div className="col text-end">
                   <button
