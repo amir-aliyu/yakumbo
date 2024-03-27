@@ -198,7 +198,9 @@ const handleEditPlantClick = async (plantId: string) => {
               <div className="row">
                 <div className="col">
                   {/* NOTE: The base64 string should start with a / */}
-                  <img src={`data:image/png;base64, ${plant.image}`} className={"me-2"} style={{ width: '50px', height: '50px' }} />
+                  {plant.image ? 
+    <img src={`data:image/png;base64, ${plant.image}`} className={"me-2"} style={{ width: '50px', height: '50px' }} /> 
+    : null}
                   {plant.name}
                 </div>
                 <div className="col">
