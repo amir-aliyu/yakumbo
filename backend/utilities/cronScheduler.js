@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const Plant = require('../models/plantModel');
 const nodemailer = require('nodemailer');
+const fs = require('fs').promises; // Import fs module with promises
 
 async function getPlantsFromDB() {
     try {
@@ -12,8 +13,23 @@ async function getPlantsFromDB() {
     }
 }
 
+// function to read HTML content from the file to be used in emails and return it having replaced the variables 
+async function readHtmlFile(filePath, name, time) {
+    try {
+        const htmlContent = await fs.readFile(filePath, 'utf8');
+        //const plantName = `${plant.name}`; // Example plant name, replace this with your actual variable
+        const replacedHtmlContent = htmlContent
+            .replace(/\{plantName\}/g, name)
+            .replace(/\${plantWateringTime}/g, time);
+        return replacedHtmlContent;
+    } catch (error) {
+        console.error('Error reading HTML file:', error);
+        throw error;
+    }
+}
+
 // Can possibly use 'to' for when we add accounts
-async function sendEmail(to, subject, text) {
+async function sendEmail(to, subject, htmlFilePath, name, time) {
     try {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -24,12 +40,14 @@ async function sendEmail(to, subject, text) {
             }
         });
 
+        const htmlContent = await readHtmlFile(htmlFilePath, name, time); // setup the HTML email
+
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
             to: 'saa210@case.edu',
             //to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
             subject: subject,
-            html: text // formatting it in html 
+            html: htmlContent // use the HTML content from the file 
         });
 
         console.log('Email sent: ', info.response);
@@ -72,15 +90,18 @@ async function schedulePlantWateringJobs(wss) {
             // elongate the message-- add in watering times and image
             let imageUrl = 'https://i.pinimg.com/736x/b9/29/6d/b9296d9f9242ecac6f918942a6368b8e.jpg'
             let message = `
-            <p>Time to water ${plant.name}!\n 
+            <p>Time to water ${plant.name}! 
             Your plant ${plant.name} needs to be watered every ${plant.wateringTime} seconds</p> 
             <img src="${imageUrl}" alt="Plant Image" style=:max-width: 100%;">
             `;
-            sendEmail('Email', 'Plant Watering Reminder', message)
-                    .catch(error => {
+            const emailFilePath = "./utilities/plantEmail.html";
+            let plantName = `${plant.name}`
+            let plantWateringTime = `${plant.wateringTime}`
+            
+            sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
                         console.error('Failed to send email:', error);
                     });
-        });
+                });
 
         cronJobs.push(job); // Add new job to the list
     });
