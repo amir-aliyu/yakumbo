@@ -32,7 +32,7 @@ const Home: FC<HomeProps> = () => {
   const fetchPresetPlants = useCallback(async () => {
     console.log('fetching preset plants')
     try {
-      const response = await fetch('/api/plants/presets');
+      const response = await fetch('/api/presets');
       const data = await response.json();
       if (response.ok) {
         console.log(data);
@@ -231,7 +231,7 @@ const handleEditPlantClick = async (plantId: string) => {
 
     {/* Plant Form Modal */}
     <PlantForm
-      isOpen={isModalOpen}
+      formIsOpen={isModalOpen}
       onClose={closeModal}
       onSubmit={handleSubmit}
       plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime } : undefined}
