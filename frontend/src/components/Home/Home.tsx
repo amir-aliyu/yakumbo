@@ -2,6 +2,8 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
+import test from 'node:test';
+import testImage from '../../test.png';
 
 interface HomeProps {}
 
@@ -44,10 +46,65 @@ const Home: FC<HomeProps> = () => {
     }
   }, []);
 
+  // Function to convert an image to base64 encoding
+  const imageToBase64 = async (image: File) => {
+    // Return a promise that resolves with the base64 string
+    return new Promise<string>((resolve, reject) => {
+      // Create a new FileReader
+      const reader = new FileReader();
+      // Set the onload event handler
+      reader.onload = () => {
+        // Resolve the promise with the result
+        resolve((reader.result as string).substring(23));
+      };
+      // Set the onerror event handler
+      reader.onerror = () => {
+        // Reject the promise with an error
+        reject(new Error('Failed to read image file'));
+      };
+      // Read the image file as a data URL
+      reader.readAsDataURL(image);
+    });
+  };
+
+  // // Test the image conversion function
+  // const testImageConversion = async () => {
+  //   try {
+  //     // Load the image file as a File object
+  //     const response = await fetch(testImage);
+  //     const blob = await response.blob();
+  //     const file = new File([blob], 'testImage.png', { type: blob.type });
+  
+  //     // Pass the File object to imageToBase64 function
+  //     const base64 = await imageToBase64(file);
+  //     console.log(base64.substring(23));
+  //   } catch (error: any) {
+  //     console.error('Error converting image:', error);
+  //   }
+  // };
+
+    // Function to handle file selection
+  const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Get the selected file
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        // Convert the file to base64
+        const base64 = await imageToBase64(file);
+        console.log(base64);
+      } catch (error: any) {
+        console.error('Error converting image:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPlants();
     fetchPresetPlants();
   }, [fetchPlants, fetchPresetPlants]);
+
+  
+  
 
   const deletePlant = async (plantId: string) => {
     try {
@@ -176,6 +233,7 @@ const handleEditPlantClick = async (plantId: string) => {
 
 
     {/* Plant List */}
+    <input type="file" onChange={handleFileSelection} />
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
         <p className="m-0 fs-3">Plant List</p>
