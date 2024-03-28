@@ -12,6 +12,7 @@ async function getPlantsFromDB() {
     }
 }
 
+// Can possibly use 'to' for when we add accounts
 async function sendEmail(to, subject, text) {
     try {
         let transporter = nodemailer.createTransport({
@@ -26,8 +27,8 @@ async function sendEmail(to, subject, text) {
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
             to: 'mfc56@case.edu', // Hard coding this for just for sprint 1
-            subject: 'Email from Node-App: A Test Message!',
-            text: '<b>The html content</b>'
+            subject: subject,
+            text: text
         });
 
         console.log('Email sent: ', info.response);
@@ -66,7 +67,8 @@ async function schedulePlantWateringJobs(wss) {
                     console.log(`Notification sent for ${plant.name}`);
             });
             // Send email notification
-            sendEmail('recipient@example.com', 'Plant Watering Reminder', `Time to water your ${plant.name}!`)
+            // Change 'Email' for second sprint 
+            sendEmail('Email', 'Plant Watering Reminder', `Time to water ${plant.name}!`)
                     .catch(error => {
                         console.error('Failed to send email:', error);
                     });
