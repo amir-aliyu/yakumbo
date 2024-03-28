@@ -26,9 +26,10 @@ async function sendEmail(to, subject, text) {
 
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
-            to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
+            to: 'saa210@case.edu',
+            //to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
             subject: subject,
-            text: text
+            html: text // formatting it in html 
         });
 
         console.log('Email sent: ', info.response);
@@ -67,8 +68,15 @@ async function schedulePlantWateringJobs(wss) {
                     console.log(`Notification sent for ${plant.name}`);
             });
             // Send email notification
-            // Change 'Email' for second sprint 
-            sendEmail('Email', 'Plant Watering Reminder', `Time to water ${plant.name}!`)
+            // Change 'Email' for second sprint
+            // elongate the message-- add in watering times and image
+            let imageUrl = 'https://i.pinimg.com/736x/b9/29/6d/b9296d9f9242ecac6f918942a6368b8e.jpg'
+            let message = `
+            <p>Time to water ${plant.name}!\n 
+            Your plant ${plant.name} needs to be watered every ${plant.wateringTime} seconds</p> 
+            <img src="${imageUrl}" alt="Plant Image" style=:max-width: 100%;">
+            `;
+            sendEmail('Email', 'Plant Watering Reminder', message)
                     .catch(error => {
                         console.error('Failed to send email:', error);
                     });
