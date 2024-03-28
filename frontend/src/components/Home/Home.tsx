@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
 import test from 'node:test';
-import testImage from '../../test.png';
 
 interface HomeProps {}
 
@@ -47,6 +46,7 @@ const Home: FC<HomeProps> = () => {
   }, []);
 
   // Function to convert an image to base64 encoding
+  // (This could be moved to the server side so we can use jimp to resize the image before converting it to base64)
   const imageToBase64 = async (image: File) => {
     // Return a promise that resolves with the base64 string
     return new Promise<string>((resolve, reject) => {
@@ -55,7 +55,7 @@ const Home: FC<HomeProps> = () => {
       // Set the onload event handler
       reader.onload = () => {
         // Resolve the promise with the result
-        resolve((reader.result as string).substring(23));
+        resolve((reader.result as string).substring(23)); // Remove the data URL prefix (data:image/png;base64,)
       };
       // Set the onerror event handler
       reader.onerror = () => {
@@ -67,23 +67,7 @@ const Home: FC<HomeProps> = () => {
     });
   };
 
-  // // Test the image conversion function
-  // const testImageConversion = async () => {
-  //   try {
-  //     // Load the image file as a File object
-  //     const response = await fetch(testImage);
-  //     const blob = await response.blob();
-  //     const file = new File([blob], 'testImage.png', { type: blob.type });
-  
-  //     // Pass the File object to imageToBase64 function
-  //     const base64 = await imageToBase64(file);
-  //     console.log(base64.substring(23));
-  //   } catch (error: any) {
-  //     console.error('Error converting image:', error);
-  //   }
-  // };
-
-    // Function to handle file selection
+  // Function to handle file selection
   const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // Get the selected file
     const file = event.target.files?.[0];
