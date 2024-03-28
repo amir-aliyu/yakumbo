@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const Plant = require('../models/plantModel');
+const nodemailer = require('nodemailer');
 
 async function getPlantsFromDB() {
     try {
@@ -8,6 +9,32 @@ async function getPlantsFromDB() {
     } catch (error) {
         console.error("Failed to fetch plants from DB:", error);
         throw error; // Rethrow or handle as needed
+    }
+}
+
+// Can possibly use 'to' for when we add accounts
+async function sendEmail(to, subject, text) {
+    try {
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                // Must use 2FA to get this to work
+                user: 'csds393.plant.people@gmail.com',
+                pass: 'jqxm ooji zqgr zawu' // This is from App Passwords 
+            }
+        });
+
+        let info = await transporter.sendMail({
+            from: 'csds393.plant.people@gmail.com',
+            to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
+            subject: subject,
+            text: text
+        });
+
+        console.log('Email sent: ', info.response);
+    } catch (error) {
+        console.error('Failed to send email: ', error);
+        throw error;
     }
 }
 
@@ -39,6 +66,12 @@ async function schedulePlantWateringJobs(wss) {
                     }));
                     console.log(`Notification sent for ${plant.name}`);
             });
+            // Send email notification
+            // Change 'Email' for second sprint 
+            sendEmail('Email', 'Plant Watering Reminder', `Time to water ${plant.name}!`)
+                    .catch(error => {
+                        console.error('Failed to send email:', error);
+                    });
         });
 
         cronJobs.push(job); // Add new job to the list
