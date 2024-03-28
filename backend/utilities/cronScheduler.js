@@ -26,7 +26,7 @@ async function sendEmail(to, subject, text) {
 
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
-            to: 'mfc56@case.edu', // Hard coding this for just for sprint 1
+            to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
             subject: subject,
             text: text
         });
