@@ -20,7 +20,7 @@ async function readHtmlFile(filePath, name, time) {
         //const plantName = `${plant.name}`; // Example plant name, replace this with your actual variable
         const replacedHtmlContent = htmlContent
             .replace(/\{plantName\}/g, name)
-            .replace(/\${plantWateringTime}/g, time);
+            .replace(/\{plantWateringTime}/g, time);
         return replacedHtmlContent;
     } catch (error) {
         console.error('Error reading HTML file:', error);
