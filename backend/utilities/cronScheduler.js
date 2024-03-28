@@ -13,11 +13,11 @@ async function getPlantsFromDB() {
     }
 }
 
-// function to read HTML content from the file to be used in emails and return it having replaced the variables 
+// function to grab the html from plantEmail.html and also replace the variables correctly
 async function readHtmlFile(filePath, name, time) {
     try {
         const htmlContent = await fs.readFile(filePath, 'utf8');
-        //const plantName = `${plant.name}`; // Example plant name, replace this with your actual variable
+        // insert the correct plant name into the HTML 
         const replacedHtmlContent = htmlContent
             .replace(/\{plantName\}/g, name)
             .replace(/\{plantWateringTime}/g, time);
@@ -86,18 +86,13 @@ async function schedulePlantWateringJobs(wss) {
                     console.log(`Notification sent for ${plant.name}`);
             });
             // Send email notification
-            // Change 'Email' for second sprint
-            // elongate the message-- add in watering times and image
-            let imageUrl = 'https://i.pinimg.com/736x/b9/29/6d/b9296d9f9242ecac6f918942a6368b8e.jpg'
-            let message = `
-            <p>Time to water ${plant.name}! 
-            Your plant ${plant.name} needs to be watered every ${plant.wateringTime} seconds</p> 
-            <img src="${imageUrl}" alt="Plant Image" style=:max-width: 100%;">
-            `;
+            
+            // setup variables for plant email filepath and name/watering times
             const emailFilePath = "./utilities/plantEmail.html";
             let plantName = `${plant.name}`
             let plantWateringTime = `${plant.wateringTime}`
-            
+           
+            // Change 'Email' for second sprint
             sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
                         console.error('Failed to send email:', error);
                     });
