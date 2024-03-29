@@ -32,7 +32,7 @@ const Home: FC<HomeProps> = () => {
   const fetchPresetPlants = useCallback(async () => {
     console.log('fetching preset plants')
     try {
-      const response = await fetch('/api/presets');
+      const response = await fetch('/api/plants');
       const data = await response.json();
       if (response.ok) {
         console.log(data);
@@ -47,7 +47,7 @@ const Home: FC<HomeProps> = () => {
   useEffect(() => {
     fetchPlants();
     fetchPresetPlants();
-  }, [fetchPlants, fetchPresetPlants]);
+  }, [fetchPlants, fetchPresetPlants, plants]);
   
 
   const deletePlant = async (plantId: string) => {
@@ -57,8 +57,8 @@ const Home: FC<HomeProps> = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        displayNotification('Plant deleted successfully!', 'success');
         fetchPlants(); // Refresh the list
+        displayNotification('Plant deleted successfully!', 'success');
       } else {
         throw new Error(data.message || 'Failed to delete plant');
       }

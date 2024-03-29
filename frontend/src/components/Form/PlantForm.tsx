@@ -2,7 +2,10 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import cx from 'classnames';
 import './PlantForm.css';
-import Downshift, { useCombobox } from 'downshift';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 interface PlantFormProps {
   formIsOpen: boolean;
@@ -19,12 +22,11 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   const fetchPresetPlants = useCallback(async () => {
     try {
-      const response = await fetch('/api/plants');
+      const response = await fetch('/api/plants'); // Temporary will change routing later
       const data = await response.json();
       if (response.ok) {
         setPresetPlants(data);
       } else {
-        throw new Error(data.message || 'Error fetching presets');
       }
     } catch (error: any) {
     }
@@ -41,96 +43,73 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     }
   }
 
-  const PlantDropdown = () => {
-    fetchPresetPlants();
-    const [items, setItems] = useState(presetPlants)
-    const [selectedItem, setSelectedItem] = React.useState(null)
+  function PlantForm() {
+    useEffect(() => {
+      fetchPresetPlants();
+    }, []);
 
-    const {
-      isOpen,
-      getToggleButtonProps,
-      getLabelProps,
-      getMenuProps,
-      getInputProps,
-      highlightedIndex,
-      getItemProps,
-    } = useCombobox({
-      onInputValueChange({inputValue}) {
-        setItems(presetPlants.filter(getPlantsFilter(inputValue)))
-      },
-      items,
-      itemToString(item) {
-        return item ? item.type : ''
-      },
-      selectedItem,
-      onSelectedItemChange: ({selectedItem: newSelectedItem}) => {
-        setSelectedItem(newSelectedItem);
-        setPlantType(newSelectedItem.type);
-      },
-    })
+    const [formPlantName, setFormPlantName] = useState('')
+    const [formPlantType, setFormPlantType] = useState('')
+    const [formWateringTime, setFormWateringTime] = useState('')
+    const [inputValue, setInputValue] = useState('')
 
     return (
-      <div>
-        <div className="w-72 flex flex-col gap-1">
-          <label htmlFor="plantType" className="w-fit" {...getLabelProps()}>
-            Plant Type:
-          </label>
-          <div className="flex shadow-sm bg-white gap-0.5">
-            <input
-              id="plantType"
-              placeholder="Select your plant type"
-              className="flex form-control mt-2"
-              {...getInputProps()}
-            />
-            <button
-              aria-label="toggle menu"
-              className="flex bg-white shadow-sm px-2"
-              type="button"
-              {...getToggleButtonProps()}
-            >
-              <svg
-                    viewBox="0 0 20 20"
-                    preserveAspectRatio="none"
-                    width={16}
-                    fill="transparent"
-                    stroke="#979797"
-                    strokeWidth="1.1px"
-                    transform={isOpen ? 'rotate(180)' : undefined}
-                  >
-                    <path d="M1,6 L10,15 L19,6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <ul
-          className={`absolute w-72 bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10 ${
-            !(isOpen && items.length) && 'hidden'
-          }`}
-          {...getMenuProps()}
-        >
-          {isOpen &&
-            items.map((item, index) => (
-              <li
-                className={cx(
-                  highlightedIndex === index && 'bg-blue-300',
-                  plantType === item && 'font-bold',
-                  'py-2 px-3 shadow-sm flex flex-col',
-                )}
-                key={item._id.toString()}
-                {...getItemProps({item, index})}
-              >
-                <span>{item.type}</span>
-              </li>
-            ))}
-        </ul>
-        <p className="font-semibold">
-          {plantType
-            ? `You have selected ${plantType}.`
-            : 'Select a plant type!'}
-        </p>
-      </div>
-    )
+        <Box component="form" onSubmit={handleSubmit}>
+          {/* Add Plant Form */}
+          <div>{`formPlantName: '${formPlantName}'`}</div>
+          <div>{`formPlantType: '${formPlantType}'`}</div>
+          <div>{`formWateringTime: '${formWateringTime}'`}</div>
+          <br />
+          <TextField
+            required
+            className="mt-2"
+            id="formPlantName" 
+            name="formPlantName"
+            label="Plant Name"
+            value={formPlantName}
+            fullWidth
+            onChange={(e) => setFormPlantName(e.target.value)}
+          />
+          <Autocomplete
+            freeSolo
+            className="mt-2"
+            value={formPlantType}
+            onChange={(event: any, newValue: string | null) => {
+              setFormPlantType(newValue);
+            }}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+              setFormPlantType(newInputValue);
+            }}
+            id="formPlantType"
+            options={presetPlants.map((option) => option.type)}
+            sx={{ width: "full" }}
+            renderInput={(params) => <TextField
+                {...params}
+                required
+                label="Plant Type"
+                name="formPlantType"
+            />}
+          />
+          <TextField
+            required
+            className="mt-2"
+            id="formWateringTime" 
+            name="formWateringTime"
+            label="Watering Time (s)"
+            value={formWateringTime}
+            fullWidth
+            onChange={(e) => setFormWateringTime(e.target.value)}
+          />
+          <button type="submit" className="btn btn-warning mt-2 text-dark">
+            {plantData ? 'Confirm Edit' : 'Add Plant'}
+          </button>
+        </Box>
+    );
   }
+
+  
 
   useEffect(() => {
     if (plantData) {
@@ -149,9 +128,19 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     resetForm();
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const data = new FormData(event.currentTarget);
+    console.log(
+        'formPlantName:', data.get('formPlantName'),
+        'formPlantType:', data.get('formPlantType'),
+        'formWateringTime:', data.get('formWateringTime')
+    )
     event.preventDefault();
-    await onSubmit(plantName, plantType, wateringTime);
+    await onSubmit(
+        data.get('formPlantName').toString(),
+        data.get('formPlantType').toString(),
+        data.get('formWateringTime').toString()
+    );
     handleClose(); // Close the modal and reset the form on successful submission
   };
 
@@ -175,40 +164,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             <button type="button" className="btn-close" onClick={handleClose}></button>
           </div>
           <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              
-              {/* Add Plant Form */}
-              <div className="form-group">
-                <label htmlFor="plantName">Plant Name:</label>
-                <input
-                  type="text"
-                  className="form-control mt-2"
-                  id="plantName"
-                  placeholder="Enter plant name"
-                  value={plantName}
-                  onChange={(e) => setPlantName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group mt-2">
-                <PlantDropdown />
-              </div>
-              <div className="form-group mt-2">
-                <label htmlFor="wateringTime">Watering Time (in seconds):</label>
-                <input
-                  type="number"
-                  className="form-control mt-2"
-                  id="wateringTime"
-                  placeholder="Enter watering time"
-                  value={wateringTime}
-                  onChange={(e) => setWateringTime(e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" className="btn btn-warning mt-2 text-dark">
-                {plantData ? 'Confirm Edit' : 'Add Plant'}
-              </button>
-            </form>
+            <PlantForm />
           </div>
         </div>
       </div>
