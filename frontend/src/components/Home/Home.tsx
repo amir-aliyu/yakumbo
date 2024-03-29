@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
+import test from 'node:test';
 
 interface HomeProps {}
 
@@ -44,11 +45,48 @@ const Home: FC<HomeProps> = () => {
     }
   }, []);
 
+  // Function to convert an image to base64 encoding
+  // (This could be moved to the server side so we can use jimp to resize the image before converting it to base64)
+  const imageToBase64 = async (image: File) => {
+    // Return a promise that resolves with the base64 string
+    return new Promise<string>((resolve, reject) => {
+      // Create a new FileReader
+      const reader = new FileReader();
+      // Set the onload event handler
+      reader.onload = () => {
+        // Resolve the promise with the result
+        resolve((reader.result as string).substring(23)); // Remove the data URL prefix (data:image/png;base64,)
+      };
+      // Set the onerror event handler
+      reader.onerror = () => {
+        // Reject the promise with an error
+        reject(new Error('Failed to read image file'));
+      };
+      // Read the image file as a data URL
+      reader.readAsDataURL(image);
+    });
+  };
+
+  // Function to handle file selection
+  const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Get the selected file
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        // Convert the file to base64
+        const base64 = await imageToBase64(file);
+        console.log(base64);
+      } catch (error: any) {
+        console.error('Error converting image:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPlants();
     fetchPresetPlants();
-  }, [fetchPlants, fetchPresetPlants, plants]);
-  
+  }, [fetchPlants, fetchPresetPlants]);
+
 
   const deletePlant = async (plantId: string) => {
     try {
@@ -177,6 +215,7 @@ const handleEditPlantClick = async (plantId: string) => {
 
 
     {/* Plant List */}
+    <input type="file" onChange={handleFileSelection} />
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
         <p className="m-0 fs-3">Plant List</p>
@@ -198,6 +237,10 @@ const handleEditPlantClick = async (plantId: string) => {
             <li key={plant._id} className="list-group-item">
               <div className="row">
                 <div className="col">
+                  {/* NOTE: The base64 string should start with a / */}
+                  {plant.image ? 
+    <img src={`data:image/png;base64, ${plant.image}`} className={"me-2"} style={{ width: '50px', height: '50px' }} /> 
+    : null}
                   {plant.name}
                 </div>
                 <div className="col">
