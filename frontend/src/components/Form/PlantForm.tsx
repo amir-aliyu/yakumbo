@@ -7,8 +7,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 interface PlantFormProps {
   formIsOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string, type: string, wateringTime: string) => Promise<void>;
-  plantData?: { name: string; type: string; wateringTime: string }; // Optional for edit
+  onSubmit: (name: string, type: string, wateringTime: string, image: string) => Promise<void>;
+  plantData?: { name: string; type: string; wateringTime: string, image:string }; // Optional for edit
 }
 
 const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantData }) => {
@@ -36,7 +36,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
       // Set the onload event handler
       reader.onload = () => {
         // Resolve the promise with the result
-        resolve((reader.result as string).substring(23)); // Remove the data URL prefix (data:image/png;base64,)
+        resolve((reader.result as string).substring(22)); // Remove the data URL prefix (data:image/png;base64,)
       };
       // Set the onerror event handler
       reader.onerror = () => {
@@ -54,23 +54,11 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   function PlantForm() {
 
-    const [formPlantName, setFormPlantName] = useState(plantData ? plantData.name : '')
-    const [formPlantType, setFormPlantType] = useState(plantData ? plantData.type : '')
-    const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : '')
-    const [formPlantImage, setFormPlantImage] = useState('')
-    const [inputValue, setInputValue] = useState('')
-
-    const VisuallyHiddenInput = styled('input')({
-      clip: 'rect(0 0 0 0)',
-      clipPath: 'inset(50%)',
-      height: 1,
-      overflow: 'hidden',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      whiteSpace: 'nowrap',
-      width: 1,
-    });
+    const [formPlantName, setFormPlantName] = useState(plantData ? plantData.name : '');
+    const [formPlantType, setFormPlantType] = useState(plantData ? plantData.type : '');
+    const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : '');
+    const [formPlantImage, setFormPlantImage] = useState(plantData ? plantData.image : '');
+    const [inputValue, setInputValue] = useState('');
 
     const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
       // Get the selected file
@@ -141,6 +129,12 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             &nbsp;&nbsp;Upload file
             <input type="file" hidden onChange={handleFileSelection} />
           </label>
+          <TextField
+            id="formPlantImage" 
+            name="formPlantImage"
+            hidden
+            value={formPlantImage}
+          />
           <br />
           <button type="submit" className="btn btn-warning mt-4 text-dark">
             {plantData ? 'Confirm Edit' : 'Add Plant'}
@@ -158,13 +152,15 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     console.log(
         'formPlantName:', data.get('formPlantName'),
         'formPlantType:', data.get('formPlantType'),
-        'formWateringTime:', data.get('formWateringTime')
+        'formWateringTime:', data.get('formWateringTime'),
+        'formPlantImage:', data.get('formPlantImage')
     )
     event.preventDefault();
     await onSubmit(
         data.get('formPlantName').toString(),
         data.get('formPlantType').toString(),
-        data.get('formWateringTime').toString()
+        data.get('formWateringTime').toString(),
+        data.get('formPlantImage').toString()
     );
     handleClose(); // Close the modal and reset the form on successful submission
   };
