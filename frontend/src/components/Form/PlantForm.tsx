@@ -16,7 +16,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   const fetchPresetPlants = useCallback(async () => {
     try {
-      const response = await fetch('/api/plants/preset');
+      const response = await fetch('/api/plants/presets');
       const data = await response.json();
       if (response.ok) {
         setPresetPlants(data);
@@ -96,6 +96,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
               setFormPlantType(newValue);
               if (newValue) {
                 setFormWateringTime(presetPlants.find((plant) => plant.type === newValue).wateringTime);
+                setFormPlantImage(presetPlants.find((plant) => plant.type === newValue).image);
               }
             }}
             inputValue={inputValue}
