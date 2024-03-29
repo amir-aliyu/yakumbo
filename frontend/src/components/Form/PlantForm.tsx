@@ -3,6 +3,7 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import './PlantForm.css';
 import { TextField, Button, Autocomplete, Box, styled } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import genericPlant from './genericplant.tsx';
 
 interface PlantFormProps {
   formIsOpen: boolean;
@@ -130,6 +131,10 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             &nbsp;&nbsp;Upload file
             <input type="file" hidden onChange={handleFileSelection} />
           </label>
+          {formPlantImage ? 
+              <img src={`data:image/png;base64, ${formPlantImage}`} className={"ms-2 mt-2"} style={{ width: '25%', height: '25%' }} /> 
+          : <img src={`data:image/png;base64, ${genericPlant}`} className={"ms-2 mt-2"} style={{ width: '25%', height: '25%' }} />
+          }
           <TextField
             id="formPlantImage" 
             name="formPlantImage"
