@@ -1,9 +1,8 @@
 // PlantFormModal.tsx
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import './PlantForm.css';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
+import { TextField, Button, Autocomplete, Box, styled } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 interface PlantFormProps {
   formIsOpen: boolean;
@@ -27,6 +26,28 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     }
   }, []);
 
+  // Function to convert an image to base64 encoding
+  // (This could be moved to the server side so we can use jimp to resize the image before converting it to base64)
+  const imageToBase64 = async (image: File) => {
+    // Return a promise that resolves with the base64 string
+    return new Promise<string>((resolve, reject) => {
+      // Create a new FileReader
+      const reader = new FileReader();
+      // Set the onload event handler
+      reader.onload = () => {
+        // Resolve the promise with the result
+        resolve((reader.result as string).substring(23)); // Remove the data URL prefix (data:image/png;base64,)
+      };
+      // Set the onerror event handler
+      reader.onerror = () => {
+        // Reject the promise with an error
+        reject(new Error('Failed to read image file'));
+      };
+      // Read the image file as a data URL
+      reader.readAsDataURL(image);
+    });
+  };
+
   useEffect(() => {
     fetchPresetPlants();
   }, [fetchPresetPlants]);
@@ -36,7 +57,35 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     const [formPlantName, setFormPlantName] = useState(plantData ? plantData.name : '')
     const [formPlantType, setFormPlantType] = useState(plantData ? plantData.type : '')
     const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : '')
+    const [formPlantImage, setFormPlantImage] = useState('')
     const [inputValue, setInputValue] = useState('')
+
+    const VisuallyHiddenInput = styled('input')({
+      clip: 'rect(0 0 0 0)',
+      clipPath: 'inset(50%)',
+      height: 1,
+      overflow: 'hidden',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      whiteSpace: 'nowrap',
+      width: 1,
+    });
+
+    const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      // Get the selected file
+      const file = event.target.files?.[0];
+      if (file) {
+        try {
+          // Convert the file to base64
+          const base64 = await imageToBase64(file);
+          setFormPlantImage(base64);
+          console.log(base64);
+        } catch (error: any) {
+          console.error('Error converting image:', error);
+        }
+      }
+    };
 
     return (
         <Box component="form" onSubmit={handleSubmit}>
@@ -86,6 +135,13 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             fullWidth
             onChange={(e) => setFormWateringTime(e.target.value)}
           />
+          <label htmlFor="formPlantImage" className="form-label mt-4">Plant Image: &nbsp;&nbsp;&nbsp;</label>
+          <label className="btn btn-warning text-dark">
+            <CloudUploadIcon />
+            &nbsp;&nbsp;Upload file
+            <input type="file" hidden onChange={handleFileSelection} />
+          </label>
+          <br />
           <button type="submit" className="btn btn-warning mt-4 text-dark">
             {plantData ? 'Confirm Edit' : 'Add Plant'}
           </button>
