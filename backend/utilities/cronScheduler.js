@@ -20,6 +20,7 @@ async function readHtmlFile(filePath, name, time) {
         // insert the correct plant name into the HTML 
         const replacedHtmlContent = htmlContent
             .replace(/\{plantName\}/g, name)
+           // .replace(/\{plantType\}/g, type) add in plant type 
             .replace(/\{plantWateringTime}/g, time);
         return replacedHtmlContent;
     } catch (error) {
@@ -90,6 +91,7 @@ async function schedulePlantWateringJobs(wss) {
             // setup variables for plant email filepath and name/watering times
             const emailFilePath = "./utilities/plantEmail.html";
             let plantName = `${plant.name}`
+            //let plantType = `${plant.type}` store the plant type
             let plantWateringTime = `${plant.wateringTime}`
            
             // Change 'Email' for second sprint
