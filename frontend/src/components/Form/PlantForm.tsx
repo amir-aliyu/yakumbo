@@ -1,11 +1,9 @@
 // PlantFormModal.tsx
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import cx from 'classnames';
 import './PlantForm.css';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 
 interface PlantFormProps {
   formIsOpen: boolean;
@@ -15,14 +13,11 @@ interface PlantFormProps {
 }
 
 const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantData }) => {
-  const [plantName, setPlantName] = useState('');
   const [presetPlants, setPresetPlants] = useState<any[]>([]); // Adjusted for TypeScript
-  const [plantType, setPlantType] = useState('');
-  const [wateringTime, setWateringTime] = useState('');
 
   const fetchPresetPlants = useCallback(async () => {
     try {
-      const response = await fetch('/api/plants'); // Temporary will change routing later
+      const response = await fetch('/api/plants/presets');
       const data = await response.json();
       if (response.ok) {
         setPresetPlants(data);
@@ -32,34 +27,20 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
     }
   }, []);
 
-  function getPlantsFilter(inputValue) {
-    const lowerCasedInputValue = inputValue.toLowerCase()
-
-    return function plantsFilter(plant) {
-      return (
-        !inputValue ||
-        plant.type.toLowerCase().includes(lowerCasedInputValue)
-      )
-    }
-  }
+  useEffect(() => {
+    fetchPresetPlants();
+  }, [fetchPresetPlants]);
 
   function PlantForm() {
-    useEffect(() => {
-      fetchPresetPlants();
-    }, []);
 
-    const [formPlantName, setFormPlantName] = useState('')
-    const [formPlantType, setFormPlantType] = useState('')
-    const [formWateringTime, setFormWateringTime] = useState('')
+    const [formPlantName, setFormPlantName] = useState(plantData ? plantData.name : '')
+    const [formPlantType, setFormPlantType] = useState(plantData ? plantData.type : '')
+    const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : '')
     const [inputValue, setInputValue] = useState('')
 
     return (
         <Box component="form" onSubmit={handleSubmit}>
           {/* Add Plant Form */}
-          <div>{`formPlantName: '${formPlantName}'`}</div>
-          <div>{`formPlantType: '${formPlantType}'`}</div>
-          <div>{`formWateringTime: '${formWateringTime}'`}</div>
-          <br />
           <TextField
             required
             className="mt-2"
@@ -76,6 +57,9 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             value={formPlantType}
             onChange={(event: any, newValue: string | null) => {
               setFormPlantType(newValue);
+              if (newValue) {
+                setFormWateringTime(presetPlants.find((plant) => plant.type === newValue).wateringTime);
+              }
             }}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
@@ -102,30 +86,15 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             fullWidth
             onChange={(e) => setFormWateringTime(e.target.value)}
           />
-          <button type="submit" className="btn btn-warning mt-2 text-dark">
+          <button type="submit" className="btn btn-warning mt-4 text-dark">
             {plantData ? 'Confirm Edit' : 'Add Plant'}
           </button>
         </Box>
     );
   }
 
-  
-
-  useEffect(() => {
-    if (plantData) {
-      setPlantName(plantData.name);
-      setPlantType(plantData.type);
-      setWateringTime(plantData.wateringTime);
-    } else {
-      setPlantName('');
-      setPlantType('');
-      setWateringTime('');
-    }
-  }, [plantData]);
-
   const handleClose = () => {
     onClose();
-    resetForm();
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -145,12 +114,6 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
   };
 
   if (!formIsOpen) return null; // Don't render the modal if it's not open
-
-  const resetForm = () => {
-    setPlantName('');
-    setPlantType('');
-    setWateringTime('');
-  };
 
   return (
     <div className="modal" style={{ display: 'block' }}>

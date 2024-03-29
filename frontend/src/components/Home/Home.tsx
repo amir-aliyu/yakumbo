@@ -22,26 +22,13 @@ const Home: FC<HomeProps> = () => {
       const data = await response.json();
       if (response.ok) {
         setPlants(data);
+        console.log('plants')
+        console.log(data);
       } else {
         throw new Error(data.message || 'Error fetching plants');
       }
     } catch (error: any) {
       displayNotification('Error fetching plants', 'error');
-    }
-  }, []);
-
-  const fetchPresetPlants = useCallback(async () => {
-    console.log('fetching preset plants')
-    try {
-      const response = await fetch('/api/plants');
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data);
-      } else {
-        throw new Error(data.message || 'Error fetching presets');
-      }
-    } catch (error: any) {
-      displayNotification('Error fetching presets', 'error');
     }
   }, []);
 
@@ -84,9 +71,7 @@ const Home: FC<HomeProps> = () => {
 
   useEffect(() => {
     fetchPlants();
-    fetchPresetPlants();
-  }, [fetchPlants, fetchPresetPlants]);
-
+  }, [fetchPlants]);
 
   const deletePlant = async (plantId: string) => {
     try {
