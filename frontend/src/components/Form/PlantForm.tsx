@@ -16,7 +16,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   const fetchPresetPlants = useCallback(async () => {
     try {
-      const response = await fetch('/api/plants/presets');
+      const response = await fetch('/api/plants/preset');
       const data = await response.json();
       if (response.ok) {
         setPresetPlants(data);
