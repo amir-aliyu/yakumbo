@@ -12,7 +12,7 @@ const Home: FC<HomeProps> = () => {
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
   const displayNotification = (message: string, type: "success" | "error" | "info") => {
-    toast[type](message, {position: 'top-left'});
+    toast[type](message, {position: 'bottom-right'});
   };
 
   const fetchPlants = useCallback(async () => {
@@ -163,36 +163,6 @@ const handleEditPlantClick = async (plantId: string) => {
     }
     closeModal();
   };
-  
-
-  // LOGIC FOR CRON JOBS
-  useEffect(() => {
-    const ws = new WebSocket('ws://localhost:4000/');
-
-    ws.onopen = () => {
-        console.log('Connected to WebSocket server');
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log("WebSocket Message:", message);
-      if (message.type === 'notification') {
-          displayNotification(message.message, 'info');
-      }
-  };
-
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-
-    ws.onclose = () => {
-        console.log('Disconnected from WebSocket server');
-    };
-
-    return () => {
-        ws.close();
-    };
-    }, []);
 
   return (
     <div className="container">
