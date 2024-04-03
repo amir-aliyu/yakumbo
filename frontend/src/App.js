@@ -12,10 +12,10 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-				<Route index element={<Home />} />
-				<Route path="/friends" element={<Friends />} />
-				<Route path="/preferences" element={<Preferences />} />
-				<Route path="*" element={<Home />} />
+					<Route index element={<Home />} />
+					<Route path="/friends" element={<Friends />} />
+					<Route path="/preferences" element={<Preferences />} />
+					<Route path="*" element={<Home />} />
 				</Route>
 			</Routes>
 			<ToastContainer/>
