@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
-import test from 'node:test';
+//import test from 'node:test';
 
 interface HomeProps {}
 
@@ -196,7 +196,7 @@ const handleEditPlantClick = async (plantId: string) => {
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4 fw-bold">Plant Watering App</h1>
+      <h1 className="mt-4 mb-4 fw-bold">My Plants</h1>
 
 
     {/* Plant List */}
