@@ -33,6 +33,14 @@ const Home: FC<HomeProps> = () => {
   }, []);
 
   useEffect(() => {
+    // Credentials are included by default in fetch requests to the same origin
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
 

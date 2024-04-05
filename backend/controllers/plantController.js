@@ -1,5 +1,7 @@
 const Plant = require('../models/plantModel');
 const Preset = require('../models/presetModel');
+
+
 // Get all plants
 const getAllPlants = async (req, res) => {
     try {
@@ -69,6 +71,7 @@ const deletePlantById = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 module.exports = {
     getAllPlants,
