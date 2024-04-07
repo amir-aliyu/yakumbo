@@ -9,6 +9,8 @@ const Friends = () => {
     ];
 
     return (
+        <div className="container">
+            <h1 className="mt-4 mb-4 fw-bold">My Friends</h1>
         <div className="card mt-4 shadow">
             <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
                 <p className="m-0 fs-3">Friends List</p>
@@ -41,6 +43,7 @@ const Friends = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     );
