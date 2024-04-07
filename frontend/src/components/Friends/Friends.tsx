@@ -11,39 +11,39 @@ const Friends = () => {
     return (
         <div className="container">
             <h1 className="mt-4 mb-4 fw-bold">My Friends</h1>
-        <div className="card mt-4 shadow">
-            <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
-                <p className="m-0 fs-3">Friends List</p>
-                <button className="btn btn-light ms-auto text-dark">Add Friend</button>
-            </div>
-            <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Profile Picture</th>
-                            <th>Name</th>
-                            <th>Dashboard</th>
-                            <th>Plant Points</th>
-                            <th>Watering Streak</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {friendsData.map(friend => (
-                            <tr key={friend.id}>
-                                <td>
-                                    <img src={friend.profilePicture} alt={friend.name} width="50" height="50" />
-                                </td>
-                                <td>{friend.name}</td>
-                                <td>
-                                    <a href={friend.dashboardLink} target="_blank" rel="noopener noreferrer">Dashboard</a>
-                                </td>
-                                <td>{friend.plantPoints}</td>
-                                <td>{friend.wateringStreak}</td>
+            <div className="card mt-4 shadow">
+                <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
+                    <p className="m-0 fs-3">Friends List</p>
+                    <button className="btn btn-light ms-auto text-dark">Add Friend</button>
+                </div>
+                <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Profile Picture</th>
+                                <th>Name</th>
+                                <th>Dashboard</th>
+                                <th>Plant Points</th>
+                                <th>Watering Streak</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {friendsData.map(friend => (
+                                <tr key={friend.id}>
+                                    <td>
+                                        <img src={friend.profilePicture} alt={friend.name} width="50" height="50" />
+                                    </td>
+                                    <td>{friend.name}</td>
+                                    <td>
+                                        <a href={friend.dashboardLink} target="_blank" rel="noopener noreferrer">Dashboard</a>
+                                    </td>
+                                    <td>{friend.plantPoints}</td>
+                                    <td>{friend.wateringStreak}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
