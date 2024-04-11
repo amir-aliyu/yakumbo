@@ -14,6 +14,7 @@ async function getPlantsFromDB() {
 }
 
 // function to grab the html from plantEmail.html and also replace the variables correctly
+// do this with watering streak 
 async function readHtmlFile(filePath, name, time) {
     try {
         const htmlContent = await fs.readFile(filePath, 'utf8');
@@ -95,9 +96,9 @@ async function schedulePlantWateringJobs(wss) {
             let plantWateringTime = `${plant.wateringTime}`
            
             // Change 'Email' for second sprint
-            // sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
-            //             console.error('Failed to send email:', error);
-            // });
+             sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
+                         console.error('Failed to send email:', error);
+             });
         });
         cronJobs.push(job); // Add new job to the list
     });
