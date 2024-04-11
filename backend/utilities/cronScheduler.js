@@ -102,9 +102,9 @@ async function schedulePlantWateringJobs(wss) {
             let currentStreak = `${plant.streak}`
            
             // Change 'Email' for second sprint
-             sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
-                         console.error('Failed to send email:', error);
-             });
+            // sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
+              //           console.error('Failed to send email:', error);
+             //});
         });
         cronJobs.push(job); // Add new job to the list
     });
