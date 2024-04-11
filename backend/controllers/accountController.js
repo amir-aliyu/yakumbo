@@ -64,7 +64,7 @@ const deleteAccountById = async (req, res) => {
 const setLoginCookie = async (req, res) => {
     // Set username cookie to request body
     res.cookie('username', req.body.username, { sameSite: 'none', secure: false });
-    res.cookie('password', 'test', { sameSite: 'none', secure: false });
+    res.cookie('password', req.body.password, { sameSite: 'none', secure: false });
     res.send('Login cookie set');
 };
 
