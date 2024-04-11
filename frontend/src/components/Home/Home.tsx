@@ -96,6 +96,40 @@ const Home: FC<HomeProps> = () => {
     setIsModalOpen(true);
   };
 
+  // function to update the watering streak
+  const updateStreak = async (plantId: string) => {
+    try {
+      // Fetch the current plant data
+      const response = await fetch(`/api/plants/${plantId}`);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch plant details');
+      }
+      
+      // Increment the streak by 1
+      const newStreak = data.streak + 1;
+      
+      // Update the streak via PATCH request
+      const updateResponse = await fetch(`/api/plants/${plantId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ streak: newStreak }),
+      });
+      
+      if (updateResponse.ok) {
+        displayNotification('Streak updated successfully!', 'success');
+        fetchPlants(); // Refresh the plant list
+      } else {
+        throw new Error('Failed to update streak');
+      }
+    } catch (error: any) {
+      displayNotification('Error updating streak', 'error');
+    }
+  };
+
   // Function to open modal for editing an existing plant
 const handleEditPlantClick = async (plantId: string) => {
   try {
@@ -183,6 +217,7 @@ const handleEditPlantClick = async (plantId: string) => {
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>
               <div className="col fw-bold fs-5">Watering Time</div>
+              <div className="col fw-bold fs-5">Watering Streak</div>
               <div className="col fw-bold fs-5 text-end">Actions</div> {/* Right-aligned header */}
             </div>
           </li>
@@ -202,6 +237,16 @@ const handleEditPlantClick = async (plantId: string) => {
                 </div>
                 <div className="col">
                   {plant.wateringTime}s
+                </div>
+                <div className="col">
+                  {plant.streak}     
+                <button
+                    className="btn btn-light btn-sm"
+                    style={{ width: '75px' }}
+                    onClick={() => updateStreak(plant._id)}
+                  >
+                    Watered
+                  </button>
                 </div>
                 <div className="col text-end">
                   <button
