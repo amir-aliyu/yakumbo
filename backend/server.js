@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/plants', plantRoutes)
+app.use('/plants', plantRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)
