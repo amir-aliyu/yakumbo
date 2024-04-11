@@ -102,13 +102,13 @@ async function schedulePlantWateringJobs(wss) {
             // setup variables for plant email filepath and name/watering times
             const emailFilePath = "./utilities/plantEmail.html";
             let plantName = `${plant.name}`
-            //let plantType = `${plant.type}` store the plant type
+            let plantType = `${plant.type}` //store the plant type
             let plantWateringTime = `${plant.wateringTime}`
            
             // Change 'Email' for second sprint
-            // sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
-            //             console.error('Failed to send email:', error);
-            // });
+            sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
+                         console.error('Failed to send email:', error);
+            });
         });
         cronJobs.push(job); // Add new job to the list
     });
