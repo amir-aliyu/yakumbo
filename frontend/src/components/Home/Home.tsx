@@ -182,7 +182,7 @@ const handleEditPlantClick = async (plantId: string) => {
             <div className="row">
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>
-              <div className="col fw-bold fs-5">Watering Time</div>
+              <div className="col fw-bold fs-5">Watering Days</div>
               <div className="col fw-bold fs-5 text-end">Actions</div> {/* Right-aligned header */}
             </div>
           </li>
@@ -201,7 +201,7 @@ const handleEditPlantClick = async (plantId: string) => {
                   {plant.type}
                 </div>
                 <div className="col">
-                  {plant.wateringTime}s
+                  {plant.wateringTime}
                 </div>
                 <div className="col text-end">
                   <button

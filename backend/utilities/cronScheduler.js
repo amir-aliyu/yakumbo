@@ -66,6 +66,16 @@ function stopAllCronJobs() {
     cronJobs = [];
 }
 
+
+function parseDaysToCron(days) {
+    const daysOfWeek = {
+        'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 
+        'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6
+    };
+    return days.split(' ').map(day => daysOfWeek[day]).join(',');
+}
+
+
 // Function to schedule cron jobs for plant watering
 async function schedulePlantWateringJobs(wss) {
     console.log(`schedulePlantWateringJobs ${wss}`)
@@ -76,7 +86,8 @@ async function schedulePlantWateringJobs(wss) {
 
     // Schedule new jobs
     plants.forEach((plant) => {
-        const job = cron.schedule(`*/${plant.wateringTime} * * * * *`, () => {
+        const daysCronFormat = parseDaysToCron(plant.wateringDays);
+        const job = cron.schedule(`0 8 * * ${daysCronFormat}`, () => { // Runs at 08:00 on specified days
             console.log(`------ Notification: Time to water your ${plant.name}!`)
             console.log(`clients: ${wss.clients.size}`)
             wss.clients.forEach((client) => {

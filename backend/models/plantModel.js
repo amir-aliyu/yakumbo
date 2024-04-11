@@ -11,7 +11,7 @@ const plantSchema = new Schema({
         required: true,
     },
     wateringTime: {
-        type: Number, // Assuming wateringTime is stored as a number (e.g., frequency in hours or days)
+        type: String, // concatenated string of days of the week ex. "Monday Wednesday Friday"
         required: true,
     },
     image: {
