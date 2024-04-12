@@ -1,4 +1,5 @@
 const Account = require('../models/accountModel');
+const getUUID = require('uuid-by-string')
 
 // Get all plants
 const getAllAccounts = async (req, res) => {
@@ -65,7 +66,9 @@ const setLoginCookie = async (req, res) => {
     // Set username cookie to request body
     res.cookie('username', req.body.username, { sameSite: 'none', secure: false });
     res.cookie('password', req.body.password, { sameSite: 'none', secure: false });
-    res.send('Login cookie set');
+    // return UUID based on username and password
+    const uuid = getUUID(req.body.username + req.body.password);
+    res.send(uuid);
 };
 
 // Get cookies
