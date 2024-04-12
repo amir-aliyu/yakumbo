@@ -28,11 +28,11 @@ const LoginPage: React.FC = () => {
           },
           body: JSON.stringify({ username: email, password: password }),
         });
-        const data = await response.json();
+        const data = await response.text();
         if (response.ok) {
           console.log(data);
         } else {
-          throw new Error(data.message || 'Error logging in');
+          throw new Error(data || 'Error logging in');
         }
       }
       catch (error: any) {
@@ -40,6 +40,26 @@ const LoginPage: React.FC = () => {
       }
     }
     , [email, password]);
+
+    const testingCookie = async () => {
+        try {
+            const response = await fetch('/api/accounts/cookies', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+            });
+            const data = await response.text();
+            if (response.ok) {
+                console.log(data);
+            } else {
+                throw new Error(data || 'Error getting cookie');
+            }
+        }
+        catch (error: any) {
+            toast.error(error.message);
+        }
+    }
 
     return (
         <div>
@@ -55,6 +75,7 @@ const LoginPage: React.FC = () => {
                 </div>
                 <button type="submit">Login</button>
             </form>
+            <button onClick={testingCookie}>TESTING</button>
         </div>
     );
 };
