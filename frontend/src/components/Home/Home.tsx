@@ -15,28 +15,6 @@ const Home: FC<HomeProps> = () => {
     toast[type](message, {position: 'bottom-right'});
   };
 
-  const testLogin = useCallback(async () => {
-    try {
-      const response = await fetch('/api/accounts/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: 'test', password: 'test' }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data);
-      } else {
-        throw new Error(data.message || 'Error logging in');
-      }
-    }
-    catch (error: any) {
-      displayNotification('Error logging in', 'error');
-    }
-  }
-  , []);
-
   const fetchPlants = useCallback(async () => {
     console.log('fetching plants')
     try {
@@ -65,10 +43,6 @@ const Home: FC<HomeProps> = () => {
     .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
-
-  useEffect(() => {
-    testLogin();
-  }, [testLogin]);
 
   // Function to convert an image to base64 encoding
   // (This could be moved to the server side so we can use jimp to resize the image before converting it to base64)

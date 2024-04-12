@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -14,8 +16,30 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Add your login logic here
+        testLogin();
     };
+
+    const testLogin = useCallback(async () => {
+      try {
+        const response = await fetch('/api/accounts/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: email, password: password }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(data);
+        } else {
+          throw new Error(data.message || 'Error logging in');
+        }
+      }
+      catch (error: any) {
+          toast.error(error.message);
+      }
+    }
+    , [email, password]);
 
     return (
         <div>
