@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,11 +21,12 @@ const LoginPage: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (loginPage) {
-            testLogin();
+            login();
+            return redirect('/dashboard');
         }
         else {
-            testRegister();
-            console.log(name, email, password);
+            register();
+            return redirect('/dashboard');
         }
     };
 
@@ -32,7 +34,7 @@ const LoginPage: React.FC = () => {
         setLoginPage(!loginPage);
     }
 
-    const testLogin = useCallback(async () => {
+    const login = useCallback(async () => {
       try {
         const response = await fetch('/api/accounts/login', {
           method: 'POST',
@@ -41,11 +43,12 @@ const LoginPage: React.FC = () => {
           },
           body: JSON.stringify({ username: email, password: password }),
         });
-        const data = await response.text();
+        const data = await response.json();
         if (response.ok) {
           console.log(data);
+          toast.success('Logged in successfully');
         } else {
-          throw new Error(data || 'Error logging in');
+          throw new Error(data.message || 'Error logging in');
         }
       }
       catch (error: any) {
@@ -54,27 +57,7 @@ const LoginPage: React.FC = () => {
     }
     , [email, password]);
 
-    const testingCookie = async () => {
-        try {
-            const response = await fetch('/api/accounts/cookies', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'text/plain',
-                },
-            });
-            const data = await response.text();
-            if (response.ok) {
-                console.log(data);
-            } else {
-                throw new Error(data || 'Error getting cookie');
-            }
-        }
-        catch (error: any) {
-            toast.error(error.message);
-        }
-    }
-
-    const testRegister = useCallback(async () => {
+    const register = useCallback(async () => {
         try {
             const response = await fetch('/api/accounts/register', {
                 method: 'POST',
@@ -83,11 +66,13 @@ const LoginPage: React.FC = () => {
                 },
                 body: JSON.stringify({ name: name, username: email, password: password }),
             });
-            const data = await response.text();
+            const data = await response.json();
             if (response.ok) {
+                console.log("Register");
                 console.log(data);
+                toast.success('Registered successfully');
             } else {
-                throw new Error(data || 'Error registering');
+                throw new Error(data.message || 'Error registering');
             }
         }
         catch (error: any) {
@@ -113,8 +98,7 @@ const LoginPage: React.FC = () => {
                 </div>
                 <button type="submit">{loginPage ? "Login" : "Register"}</button>
             </form>
-            <button onClick={testingCookie}>TESTING</button>
-            <button onClick={toggleLoginPage}>{loginPage ? "Register" : "Login"}</button>
+            <button onClick={toggleLoginPage}>{loginPage ? "Click to Register Instead!" : "Click to Login Instead!"}</button>
         </div>
     );
 };
