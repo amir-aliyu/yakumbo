@@ -26,9 +26,10 @@ const getAccountById = async (req, res) => {
 
 // Add new account
 const addAccount = async (req, res) => {
-    const { name, email, uuid } = req.body;
+    const { name, username, password } = req.body;
+    const uuid = getUUID(username + password);
     try {
-        const account = await Account.create({ name, email, uuid });
+        const account = await Account.create({ name, username, uuid });
         res.status(200).json(account);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -63,11 +64,10 @@ const deleteAccountById = async (req, res) => {
 
 // Set login cookie
 const setLoginCookie = async (req, res) => {
-    // Set username cookie to request body
-    res.cookie('username', req.body.username, { sameSite: 'none', secure: false });
-    res.cookie('password', req.body.password, { sameSite: 'none', secure: false });
     // return UUID based on username and password
     const uuid = getUUID(req.body.username + req.body.password);
+    // set cookie
+    res.cookie('uuid', uuid, { sameSite: 'none', secure: false });
     res.send(uuid);
 };
 

@@ -8,6 +8,7 @@ interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const [plants, setPlants] = useState<any[]>([]); // Adjusted for TypeScript
+  const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
@@ -18,10 +19,15 @@ const Home: FC<HomeProps> = () => {
   const fetchPlants = useCallback(async () => {
     console.log('fetching plants')
     try {
-      const response = await fetch('/api/plants/');
+      const response = await fetch(`/api/plants/list/${uuid}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       if (response.ok) {
-        console.log('plants')
+        console.log('plants');
         console.log(data);
         setPlants(data);
       } else {
@@ -30,7 +36,7 @@ const Home: FC<HomeProps> = () => {
     } catch (error: any) {
       displayNotification('Error fetching plants', 'error');
     }
-  }, []);
+  }, [uuid]);
 
   useEffect(() => {
     // Credentials are included by default in fetch requests to the same origin
@@ -39,7 +45,7 @@ const Home: FC<HomeProps> = () => {
       credentials: 'include', // Include credentials
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {setUuid(data.uuid);})
     .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);

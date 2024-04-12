@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [loginPage, setLoginPage] = useState(true);
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -17,8 +19,18 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        testLogin();
+        if (loginPage) {
+            testLogin();
+        }
+        else {
+            testRegister();
+            console.log(name, email, password);
+        }
     };
+
+    const toggleLoginPage = () => {
+        setLoginPage(!loginPage);
+    }
 
     const testLogin = useCallback(async () => {
       try {
@@ -62,10 +74,35 @@ const LoginPage: React.FC = () => {
         }
     }
 
+    const testRegister = useCallback(async () => {
+        try {
+            const response = await fetch('/api/accounts/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, username: email, password: password }),
+            });
+            const data = await response.text();
+            if (response.ok) {
+                console.log(data);
+            } else {
+                throw new Error(data || 'Error registering');
+            }
+        }
+        catch (error: any) {
+            toast.error(error.message);
+        }
+    }, [name, email, password]);
+
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>{loginPage ? "Login Page" : "Register Page"}</h1>
             <form onSubmit={handleSubmit}>
+                {!loginPage && <div>
+                    <label>Name:</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                </div>}
                 <div>
                     <label>Email:</label>
                     <input type="email" value={email} onChange={handleEmailChange} />
@@ -74,9 +111,10 @@ const LoginPage: React.FC = () => {
                     <label>Password:</label>
                     <input type="password" value={password} onChange={handlePasswordChange} />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit">{loginPage ? "Login" : "Register"}</button>
             </form>
             <button onClick={testingCookie}>TESTING</button>
+            <button onClick={toggleLoginPage}>{loginPage ? "Register" : "Login"}</button>
         </div>
     );
 };

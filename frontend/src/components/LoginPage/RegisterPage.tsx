@@ -16,28 +16,7 @@ const RegisterPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        testLogin();
     };
-
-    const testingCookie = async () => {
-        try {
-            const response = await fetch('/api/accounts/cookies', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'text/plain',
-                },
-            });
-            const data = await response.text();
-            if (response.ok) {
-                console.log(data);
-            } else {
-                throw new Error(data || 'Error getting cookie');
-            }
-        }
-        catch (error: any) {
-            toast.error(error.message);
-        }
-    }
 
     return (
         <div>

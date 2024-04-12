@@ -17,6 +17,10 @@ const plantSchema = new Schema({
     image: {
         type: String,
         required: false,
+    },
+    owner: {
+        type: String,
+        required: true,
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 

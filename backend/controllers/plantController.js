@@ -5,7 +5,7 @@ const Preset = require('../models/presetModel');
 // Get all plants
 const getAllPlants = async (req, res) => {
     try {
-        const plants = await Plant.find();
+        const plants = await Plant.find({ owner: req.params.uuid });
         res.status(200).json(plants);
     } catch (error) {
         res.status(400).json({ error: error.message });
