@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
-import test from 'node:test';
+//import test from 'node:test';
 
 interface HomeProps {}
 
@@ -12,7 +12,7 @@ const Home: FC<HomeProps> = () => {
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
   const displayNotification = (message: string, type: "success" | "error" | "info") => {
-    toast[type](message, {position: 'top-left'});
+    toast[type](message, {position: 'bottom-right'});
   };
 
   const testLogin = useCallback(async () => {
@@ -197,41 +197,10 @@ const handleEditPlantClick = async (plantId: string) => {
     }
     closeModal();
   };
-  
-
-  // LOGIC FOR CRON JOBS
-  useEffect(() => {
-    const ws = new WebSocket('ws://localhost:4000/');
-
-    ws.onopen = () => {
-        console.log('Connected to WebSocket server');
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log("WebSocket Message:", message);
-      if (message.type === 'notification') {
-          displayNotification(message.message, 'info');
-      }
-  };
-
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-
-    ws.onclose = () => {
-        console.log('Disconnected from WebSocket server');
-    };
-
-    return () => {
-        ws.close();
-    };
-    }, []);
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4 fw-bold">Plant Watering App</h1>
-      <button onClick={testLogin} className="btn btn-primary">Test Login</button>
+      <h1 className="mt-4 mb-4 fw-bold">My Plants</h1>
     {/* Plant List */}
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
@@ -245,7 +214,7 @@ const handleEditPlantClick = async (plantId: string) => {
             <div className="row">
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>
-              <div className="col fw-bold fs-5">Watering Time</div>
+              <div className="col fw-bold fs-5">Watering Days</div>
               <div className="col fw-bold fs-5 text-end">Actions</div> {/* Right-aligned header */}
             </div>
           </li>
@@ -264,7 +233,7 @@ const handleEditPlantClick = async (plantId: string) => {
                   {plant.type}
                 </div>
                 <div className="col">
-                  {plant.wateringTime}s
+                  {plant.wateringTime}
                 </div>
                 <div className="col text-end">
                   <button
