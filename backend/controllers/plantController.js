@@ -37,9 +37,9 @@ const getPlantById = async (req, res) => {
 
 // Add new plant
 const addPlant = async (req, res) => {
-    const { name, type, wateringTime, image } = req.body;
+    const { name, type, wateringTime, image, owner } = req.body;
     try {
-        const plant = await Plant.create({ name, type, wateringTime, image });
+        const plant = await Plant.create({ name, type, wateringTime, image, owner });
         res.status(200).json(plant);
     } catch (error) {
         res.status(400).json({ error: error.message });

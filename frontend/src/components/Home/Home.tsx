@@ -132,7 +132,7 @@ const handleEditPlantClick = async (plantId: string) => {
   };
 
   // Function to submit the form data
-  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string) => {
+  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string, owner: string) => {
     if (editingPlant) {
       // call the API to update the plant
     try {
@@ -141,7 +141,7 @@ const handleEditPlantClick = async (plantId: string) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, type, wateringTime, image }),
+        body: JSON.stringify({ name, type, wateringTime, image, owner }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -161,7 +161,7 @@ const handleEditPlantClick = async (plantId: string) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, type, wateringTime, image }),
+          body: JSON.stringify({ name, type, wateringTime, image, owner:uuid }),
         });
         const data = await response.json();
         if (response.ok) {
@@ -243,7 +243,7 @@ const handleEditPlantClick = async (plantId: string) => {
       formIsOpen={isModalOpen}
       onClose={closeModal}
       onSubmit={handleSubmit}
-      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image } : undefined}
+      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image, owner: uuid } : undefined}
     />
 
     </div>

@@ -8,12 +8,13 @@ import genericPlant from './genericplant.tsx';
 interface PlantFormProps {
   formIsOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string, type: string, wateringTime: string, image: string) => Promise<void>;
-  plantData?: { name: string; type: string; wateringTime: string, image:string }; // Optional for edit
+  onSubmit: (name: string, type: string, wateringTime: string, image: string, owner: string) => Promise<void>;
+  plantData?: { name: string; type: string; wateringTime: string, image:string, owner:string }; // Optional for edit
 }
 
 const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantData }) => {
   const [presetPlants, setPresetPlants] = useState<any[]>([]); // Adjusted for TypeScript
+  const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
 
   const fetchPresetPlants = useCallback(async () => {
     try {
@@ -51,6 +52,13 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   useEffect(() => {
     fetchPresetPlants();
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
   }, [fetchPresetPlants]);
 
   function PlantForm() {
@@ -175,14 +183,17 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
       'formPlantName:', data.get('formPlantName'),
       'formPlantType:', data.get('formPlantType'),
       'formWateringTime:', data.get('formWateringTime'),
-      'formPlantImage:', data.get('formPlantImage')
+      'formPlantImage:', data.get('formPlantImage'),
+      'formPlantOwner', data.get('formPlantOwner'),
+      'owner:', uuid
     )
     event.preventDefault();
     await onSubmit(
       data.get('formPlantName')?.toString() ?? '',
       data.get('formPlantType')?.toString() ?? '',
       data.get('formWateringTime')?.toString() ?? '',
-      data.get('formPlantImage')?.toString() ?? ''
+      data.get('formPlantImage')?.toString() ?? '',
+      data.get('formPlantOwner')?.toString() ?? '',
     );
     handleClose(); // Close the modal and reset the form on successful submission
   };
