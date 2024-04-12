@@ -29,15 +29,10 @@ const accountSchema = new Schema({
         type: String,
         required: true,
     },
-    password: {
+    uuid: {
         type: String,
         required: true,
-    },
-    image: {
-        type: String,
-        required: false,
-    },
-    plants: [plantSchema],
+    }
 
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 

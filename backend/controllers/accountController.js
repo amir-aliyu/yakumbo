@@ -26,9 +26,9 @@ const getAccountById = async (req, res) => {
 
 // Add new account
 const addAccount = async (req, res) => {
-    const { name, email, password, image, id } = req.body;
+    const { name, email, uuid } = req.body;
     try {
-        const account = await Account.create({ name, email, password, image });
+        const account = await Account.create({ name, email, uuid });
         res.status(200).json(account);
     } catch (error) {
         res.status(400).json({ error: error.message });

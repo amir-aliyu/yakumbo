@@ -2,8 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,28 +18,6 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         testLogin();
     };
-
-    const testLogin = useCallback(async () => {
-      try {
-        const response = await fetch('/api/accounts/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username: email, password: password }),
-        });
-        const data = await response.text();
-        if (response.ok) {
-          console.log(data);
-        } else {
-          throw new Error(data || 'Error logging in');
-        }
-      }
-      catch (error: any) {
-          toast.error(error.message);
-      }
-    }
-    , [email, password]);
 
     const testingCookie = async () => {
         try {
@@ -64,7 +41,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Registration Page</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
@@ -74,11 +51,10 @@ const LoginPage: React.FC = () => {
                     <label>Password:</label>
                     <input type="password" value={password} onChange={handlePasswordChange} />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit">Register</button>
             </form>
-            <button onClick={testingCookie}>TESTING</button>
         </div>
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

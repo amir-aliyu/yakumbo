@@ -20,6 +20,7 @@ router.get('/:id', getAccountById);
 // POST Requests
 router.post('/', addAccount);
 router.post('/login', setLoginCookie);
+router.post('/register', addAccount);
 
 
 // PATCH Requests
