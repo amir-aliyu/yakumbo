@@ -21,6 +21,9 @@ const Layout = () => {
                     <li className="nav-item">
                         <Link to="/preferences">My Preferences</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="/login">Login</Link>
+                    </li>
                 </ul>
             </div>
         </nav>
