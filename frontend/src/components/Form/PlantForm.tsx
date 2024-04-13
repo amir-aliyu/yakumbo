@@ -8,12 +8,13 @@ import genericPlant from './genericplant.tsx';
 interface PlantFormProps {
   formIsOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string, type: string, wateringTime: string, image: string) => Promise<void>;
-  plantData?: { name: string; type: string; wateringTime: string, image:string }; // Optional for edit
+  onSubmit: (name: string, type: string, wateringTime: string, image: string, owner: string) => Promise<void>;
+  plantData?: { name: string; type: string; wateringTime: string, image:string, owner:string }; // Optional for edit
 }
 
 const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantData }) => {
   const [presetPlants, setPresetPlants] = useState<any[]>([]); // Adjusted for TypeScript
+  const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
 
   const fetchPresetPlants = useCallback(async () => {
     try {
@@ -51,13 +52,20 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   useEffect(() => {
     fetchPresetPlants();
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
   }, [fetchPresetPlants]);
 
   function PlantForm() {
 
     const [formPlantName, setFormPlantName] = useState(plantData ? plantData.name : '');
     const [formPlantType, setFormPlantType] = useState(plantData ? plantData.type : '');
-    const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : '');
+    const [formWateringTime, setFormWateringTime] = useState(plantData ? plantData.wateringTime : 'Sunday');
     const [formPlantImage, setFormPlantImage] = useState(plantData ? plantData.image : '');
     const [inputValue, setInputValue] = useState('');
 
@@ -94,9 +102,13 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             className="mt-2"
             value={formPlantType}
             onChange={(event: any, newValue: string | null) => {
-              setFormPlantType(newValue);
+              setFormPlantType(newValue as string);
               if (newValue) {
-                setFormWateringTime(presetPlants.find((plant) => plant.type === newValue).wateringTime);
+                const plant = presetPlants.find((plant) => plant.type === newValue);
+                if (plant && typeof plant.wateringTime === 'string') {
+                  setFormWateringTime(presetPlants.find((plant) => plant.type === newValue).wateringTime);
+                }
+                console.log(presetPlants.find((plant) => plant.type === newValue).wateringTime);
                 setFormPlantImage(presetPlants.find((plant) => plant.type === newValue).image);
               }
             }}
@@ -115,15 +127,21 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
                 name="formPlantType"
             />}
           />
-          <TextField
-            required
-            className="mt-2"
-            id="formWateringTime" 
-            name="formWateringTime"
-            label="Watering Time (s)"
-            value={formWateringTime}
-            fullWidth
-            onChange={(e) => setFormWateringTime(e.target.value)}
+          <Autocomplete
+              multiple
+              id="formWateringTime"
+              options={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
+              getOptionLabel={(option) => option}
+              value={typeof formWateringTime === 'string' ? formWateringTime.split(" ") : formWateringTime}
+              onChange={(event, newValue: string[]) => {
+                  console.log("HERE")
+                  setFormWateringTime(newValue.join(' '));
+                  console.log(formWateringTime)
+                  console.log("HERE2")
+              }}
+              renderInput={(params) => (
+                  <TextField {...params} variant="standard" label="Watering Days" placeholder="Select Watering Days" fullWidth />
+              )}
           />
           <label htmlFor="formPlantImage" className="form-label mt-4">Plant Image: &nbsp;&nbsp;&nbsp;</label>
           <label className="btn btn-warning text-dark">
@@ -141,6 +159,12 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
             hidden
             value={formPlantImage}
           />
+          <TextField
+            id="formWateringTime" 
+            name="formWateringTime"
+            hidden
+            value={formWateringTime}
+          />
           <br />
           <button type="submit" className="btn btn-warning mt-4 text-dark">
             {plantData ? 'Confirm Edit' : 'Add Plant'}
@@ -156,17 +180,20 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const data = new FormData(event.currentTarget);
     console.log(
-        'formPlantName:', data.get('formPlantName'),
-        'formPlantType:', data.get('formPlantType'),
-        'formWateringTime:', data.get('formWateringTime'),
-        'formPlantImage:', data.get('formPlantImage')
+      'formPlantName:', data.get('formPlantName'),
+      'formPlantType:', data.get('formPlantType'),
+      'formWateringTime:', data.get('formWateringTime'),
+      'formPlantImage:', data.get('formPlantImage'),
+      'formPlantOwner', data.get('formPlantOwner'),
+      'owner:', uuid
     )
     event.preventDefault();
     await onSubmit(
-        data.get('formPlantName').toString(),
-        data.get('formPlantType').toString(),
-        data.get('formWateringTime').toString(),
-        data.get('formPlantImage').toString()
+      data.get('formPlantName')?.toString() ?? '',
+      data.get('formPlantType')?.toString() ?? '',
+      data.get('formWateringTime')?.toString() ?? '',
+      data.get('formPlantImage')?.toString() ?? '',
+      data.get('formPlantOwner')?.toString() ?? '',
     );
     handleClose(); // Close the modal and reset the form on successful submission
   };

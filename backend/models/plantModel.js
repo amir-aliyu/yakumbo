@@ -11,12 +11,21 @@ const plantSchema = new Schema({
         required: true,
     },
     wateringTime: {
-        type: Number, // Assuming wateringTime is stored as a number (e.g., frequency in hours or days)
+        type: String, // concatenated string of days of the week ex. "Monday Wednesday Friday"
         required: true,
     },
     image: {
         type: String,
         required: false,
+    },
+    owner: {
+        type: String,
+        required: true,
+    },
+    streak: {
+        type: Number,
+        required: false,
+        default: 0,
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 

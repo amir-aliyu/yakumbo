@@ -2,26 +2,32 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
-import test from 'node:test';
+//import test from 'node:test';
 
 interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const [plants, setPlants] = useState<any[]>([]); // Adjusted for TypeScript
+  const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
   const displayNotification = (message: string, type: "success" | "error" | "info") => {
-    toast[type](message, {position: 'top-left'});
+    toast[type](message, {position: 'bottom-right'});
   };
 
   const fetchPlants = useCallback(async () => {
     console.log('fetching plants')
     try {
-      const response = await fetch('/api/plants/');
+      const response = await fetch(`/api/plants/list/${uuid}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       if (response.ok) {
-        console.log('plants')
+        console.log('plants');
         console.log(data);
         setPlants(data);
       } else {
@@ -30,9 +36,28 @@ const Home: FC<HomeProps> = () => {
     } catch (error: any) {
       displayNotification('Error fetching plants', 'error');
     }
-  }, []);
+  }, [uuid]);
 
   useEffect(() => {
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
+    console.log(uuid);
+  }, [uuid]);
+
+  useEffect(() => {
+    // Credentials are included by default in fetch requests to the same origin
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
 
@@ -96,6 +121,40 @@ const Home: FC<HomeProps> = () => {
     setIsModalOpen(true);
   };
 
+  // function to update the watering streak
+  const updateStreak = async (plantId: string) => {
+    try {
+      // Fetch the current plant data
+      const response = await fetch(`/api/plants/${plantId}`);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch plant details');
+      }
+      
+      // Increment the streak by 1
+      const newStreak = data.streak + 1;
+      
+      // Update the streak via PATCH request
+      const updateResponse = await fetch(`/api/plants/${plantId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ streak: newStreak }),
+      });
+      
+      if (updateResponse.ok) {
+        displayNotification('Streak updated successfully!', 'success');
+        fetchPlants(); // Refresh the plant list
+      } else {
+        throw new Error('Failed to update streak');
+      }
+    } catch (error: any) {
+      displayNotification('Error updating streak', 'error');
+    }
+  };
+
   // Function to open modal for editing an existing plant
 const handleEditPlantClick = async (plantId: string) => {
   try {
@@ -118,7 +177,7 @@ const handleEditPlantClick = async (plantId: string) => {
   };
 
   // Function to submit the form data
-  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string) => {
+  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string, owner: string) => {
     if (editingPlant) {
       // call the API to update the plant
     try {
@@ -127,7 +186,7 @@ const handleEditPlantClick = async (plantId: string) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, type, wateringTime, image }),
+        body: JSON.stringify({ name, type, wateringTime, image, owner }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -147,7 +206,7 @@ const handleEditPlantClick = async (plantId: string) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, type, wateringTime, image }),
+          body: JSON.stringify({ name, type, wateringTime, image, owner:uuid }),
         });
         const data = await response.json();
         if (response.ok) {
@@ -163,42 +222,10 @@ const handleEditPlantClick = async (plantId: string) => {
     }
     closeModal();
   };
-  
-
-  // LOGIC FOR CRON JOBS
-  useEffect(() => {
-    const ws = new WebSocket('ws://localhost:4000/');
-
-    ws.onopen = () => {
-        console.log('Connected to WebSocket server');
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log("WebSocket Message:", message);
-      if (message.type === 'notification') {
-          displayNotification(message.message, 'info');
-      }
-  };
-
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-
-    ws.onclose = () => {
-        console.log('Disconnected from WebSocket server');
-    };
-
-    return () => {
-        ws.close();
-    };
-    }, []);
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4 fw-bold">Plant Watering App</h1>
-
-
+      <h1 className="mt-4 mb-4 fw-bold">My Plants</h1>
     {/* Plant List */}
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
@@ -212,7 +239,8 @@ const handleEditPlantClick = async (plantId: string) => {
             <div className="row">
               <div className="col fw-bold fs-5">Name</div>
               <div className="col fw-bold fs-5">Type</div>
-              <div className="col fw-bold fs-5">Watering Time</div>
+              <div className="col fw-bold fs-5">Watering Days</div>
+              <div className="col fw-bold fs-5">Watering Streak</div>
               <div className="col fw-bold fs-5 text-end">Actions</div> {/* Right-aligned header */}
             </div>
           </li>
@@ -231,7 +259,17 @@ const handleEditPlantClick = async (plantId: string) => {
                   {plant.type}
                 </div>
                 <div className="col">
-                  {plant.wateringTime}s
+                  {plant.wateringTime}
+                </div>
+                <div className="col">
+                  {plant.streak}     
+                <button
+                    className="btn btn-light btn-sm"
+                    style={{ width: '75px' }}
+                    onClick={() => updateStreak(plant._id)}
+                  >
+                    Watered
+                  </button>
                 </div>
                 <div className="col text-end">
                   <button
@@ -261,7 +299,7 @@ const handleEditPlantClick = async (plantId: string) => {
       formIsOpen={isModalOpen}
       onClose={closeModal}
       onSubmit={handleSubmit}
-      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image } : undefined}
+      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image, owner: uuid } : undefined}
     />
 
     </div>

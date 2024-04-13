@@ -1,10 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const WebSocket = require('ws');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 require('dotenv').config();
 
 const plantRoutes = require('./routes/plants');
+const accountRoutes = require('./routes/accounts');
 const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
 
 const PORT = process.env.PORT || 4000;
@@ -16,13 +19,20 @@ const app = express();
 // middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
+// Enable CORS
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow this origin
+    credentials: true, // Allow credentials
+}));
 app.use((req, res, next) => {
     console.log(req.path, req.method)
     next()
 })
 
 // routes
-app.use('/plants', plantRoutes)
+app.use('/api/plants', plantRoutes)
+app.use('/api/accounts', accountRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)

@@ -11,7 +11,7 @@ const {
 } = require('../controllers/plantController');
 
 // GET Requests
-router.get('/', getAllPlants);
+router.get('/list/:uuid', getAllPlants);
 router.get('/presets', getAllPresetPlants);
 router.get('/:id', getPlantById);
 
