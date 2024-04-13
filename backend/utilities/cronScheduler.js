@@ -14,14 +14,18 @@ async function getPlantsFromDB() {
 }
 
 // function to grab the html from plantEmail.html and also replace the variables correctly
-async function readHtmlFile(filePath, name, time) {
+// do this with watering streak 
+async function readHtmlFile(filePath, name, time, id, currentStreak) {
     try {
         const htmlContent = await fs.readFile(filePath, 'utf8');
         // insert the correct plant name into the HTML 
         const replacedHtmlContent = htmlContent
             .replace(/\{plantName\}/g, name)
            // .replace(/\{plantType\}/g, type) add in plant type 
-            .replace(/\{plantWateringTime}/g, time);
+            .replace(/\{plantWateringTime}/g, time)
+            .replace(/\{plantID}/g, id)
+            .replace(/\{currentStreak}/g, currentStreak);
+            
         return replacedHtmlContent;
     } catch (error) {
         console.error('Error reading HTML file:', error);
@@ -30,7 +34,7 @@ async function readHtmlFile(filePath, name, time) {
 }
 
 // Can possibly use 'to' for when we add accounts
-async function sendEmail(to, subject, htmlFilePath, name, time) {
+async function sendEmail(to, subject, htmlFilePath, name, time, id, currentStreak) {
     try {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -41,7 +45,7 @@ async function sendEmail(to, subject, htmlFilePath, name, time) {
             }
         });
 
-        const htmlContent = await readHtmlFile(htmlFilePath, name, time); // setup the HTML email
+        const htmlContent = await readHtmlFile(htmlFilePath, name, time, id, currentStreak); // setup the HTML email
 
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
@@ -66,7 +70,6 @@ function stopAllCronJobs() {
     cronJobs = [];
 }
 
-
 function parseDaysToCron(days) {
     const daysOfWeek = {
         'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 
@@ -74,7 +77,6 @@ function parseDaysToCron(days) {
     };
     return days.split(' ').map(day => daysOfWeek[day]).join(',');
 }
-
 
 // Function to schedule cron jobs for plant watering
 async function schedulePlantWateringJobs(wss) {
@@ -104,11 +106,14 @@ async function schedulePlantWateringJobs(wss) {
             let plantName = `${plant.name}`
             let plantType = `${plant.type}` //store the plant type
             let plantWateringTime = `${plant.wateringTime}`
+            let plantID = `${plant.id}`
+            let currentStreak = `${plant.streak}`
            
             // Change 'Email' for second sprint
-            sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime).catch(error => {
-                         console.error('Failed to send email:', error);
-            });
+            // sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
+              //           console.error('Failed to send email:', error);
+             //});
+
         });
         cronJobs.push(job); // Add new job to the list
     });

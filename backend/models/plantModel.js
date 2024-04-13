@@ -21,6 +21,11 @@ const plantSchema = new Schema({
     owner: {
         type: String,
         required: true,
+    },
+    streak: {
+        type: Number,
+        required: false,
+        default: 0,
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
