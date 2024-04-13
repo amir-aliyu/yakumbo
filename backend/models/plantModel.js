@@ -18,6 +18,10 @@ const plantSchema = new Schema({
         type: String,
         required: false,
     },
+    owner: {
+        type: String,
+        required: true,
+    },
     streak: {
         type: Number,
         required: false,

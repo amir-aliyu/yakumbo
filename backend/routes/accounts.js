@@ -6,15 +6,21 @@ const {
     getAccountById,
     addAccount,
     deleteAccountById,
-    updateAccountById
+    updateAccountById,
+    setLoginCookie,
+    getCookies
 } = require('../controllers/accountController');
 
 // GET Requests
 router.get('/', getAllAccounts);
+router.get('/cookies', getCookies);
 router.get('/:id', getAccountById);
 
 // POST Requests
-router.post('/', addAccount)
+router.post('/', addAccount);
+router.post('/login', setLoginCookie);
+router.post('/register', addAccount);
+
 
 // PATCH Requests
 router.patch('/:id', updateAccountById);

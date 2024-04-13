@@ -8,6 +8,7 @@ interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const [plants, setPlants] = useState<any[]>([]); // Adjusted for TypeScript
+  const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
@@ -18,10 +19,15 @@ const Home: FC<HomeProps> = () => {
   const fetchPlants = useCallback(async () => {
     console.log('fetching plants')
     try {
-      const response = await fetch('/api/plants/');
+      const response = await fetch(`/api/plants/list/${uuid}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       if (response.ok) {
-        console.log('plants')
+        console.log('plants');
         console.log(data);
         setPlants(data);
       } else {
@@ -30,9 +36,17 @@ const Home: FC<HomeProps> = () => {
     } catch (error: any) {
       displayNotification('Error fetching plants', 'error');
     }
-  }, []);
+  }, [uuid]);
 
   useEffect(() => {
+    // Credentials are included by default in fetch requests to the same origin
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
 
@@ -152,7 +166,7 @@ const handleEditPlantClick = async (plantId: string) => {
   };
 
   // Function to submit the form data
-  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string) => {
+  const handleSubmit = async (name: string, type: string, wateringTime: string, image: string, owner: string) => {
     if (editingPlant) {
       // call the API to update the plant
     try {
@@ -161,7 +175,7 @@ const handleEditPlantClick = async (plantId: string) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, type, wateringTime, image }),
+        body: JSON.stringify({ name, type, wateringTime, image, owner }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -181,7 +195,7 @@ const handleEditPlantClick = async (plantId: string) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, type, wateringTime, image }),
+          body: JSON.stringify({ name, type, wateringTime, image, owner:uuid }),
         });
         const data = await response.json();
         if (response.ok) {
@@ -201,8 +215,6 @@ const handleEditPlantClick = async (plantId: string) => {
   return (
     <div className="container">
       <h1 className="mt-4 mb-4 fw-bold">My Plants</h1>
-
-
     {/* Plant List */}
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
@@ -276,7 +288,7 @@ const handleEditPlantClick = async (plantId: string) => {
       formIsOpen={isModalOpen}
       onClose={closeModal}
       onSubmit={handleSubmit}
-      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image } : undefined}
+      plantData={editingPlant ? { name: editingPlant.name, type: editingPlant.type, wateringTime: editingPlant.wateringTime, image: editingPlant.image, owner: uuid } : undefined}
     />
 
     </div>
