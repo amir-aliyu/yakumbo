@@ -11,18 +11,35 @@ const plantSchema = new Schema({
         required: true,
     },
     wateringTime: {
-        type: String, // concatenated string of days of the week ex. "Monday Wednesday Friday"
+        type: Number,
+        required: true,
+    },
+    image: {
+        type: String,
+        required: false,
+    }
+}, { timestamps: true }); 
+
+const accountSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
         required: true,
     },
     image: {
         type: String,
         required: false,
     },
-    streak: {
-        type: Number,
-        required: false,
-        default: 0,
-    }
+    plants: [plantSchema],
+
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
-module.exports = mongoose.model('Plant', plantSchema);
+
+module.exports = mongoose.model('Account', accountSchema);

@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 require('dotenv').config();
 
 const plantRoutes = require('./routes/plants');
+const accountRoutes = require('./routes/accounts');
 const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
 
 const PORT = process.env.PORT || 4000;
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/plants', plantRoutes)
+app.use('/api/accounts', accountRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)
