@@ -39,6 +39,17 @@ const Home: FC<HomeProps> = () => {
   }, [uuid]);
 
   useEffect(() => {
+    fetch('http://localhost:4000/api/accounts/cookies', {
+      method: 'GET',
+      credentials: 'include', // Include credentials
+    })
+    .then(response => response.json())
+    .then(data => {setUuid(data.uuid);})
+    .catch(error => console.error('Error:', error));
+    console.log(uuid);
+  }, [uuid]);
+
+  useEffect(() => {
     // Credentials are included by default in fetch requests to the same origin
     fetch('http://localhost:4000/api/accounts/cookies', {
       method: 'GET',

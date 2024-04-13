@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,6 +9,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loginPage, setLoginPage] = useState(true);
+    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -22,11 +23,11 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         if (loginPage) {
             login();
-            return redirect('/dashboard');
+            navigate('/dashboard');
         }
         else {
             register();
-            return redirect('/dashboard');
+            navigate('/dashboard');
         }
     };
 
