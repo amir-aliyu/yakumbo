@@ -14,7 +14,7 @@ const getAllAccounts = async (req, res) => {
 // Get a specific account by ID
 const getAccountById = async (req, res) => {
     try {
-        const account = await Account.findById(req.params.id);
+        const account = await Account.findOne({ uuid: req.params.id });
         if (!account) {
             return res.status(404).json({ message: 'Account not found' });
         }
@@ -88,6 +88,27 @@ const getCookies = async (req, res) => {
     res.send(req.cookies);
 };
 
+// Add a friend to the account
+const addFriend = async (req, res) => {
+    try {
+        // given the email in req.body.friend, find the account with that email
+        const friendAccount = await Account.findOne({ username: req.body.friend });
+        console.log(friendAccount.uuid);
+        const friendUUID = friendAccount ? friendAccount.uuid : null;
+
+
+        const account = await Account.findOne({ uuid: req.params.id });
+        if (!account) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+        account.friends.push(friendUUID);
+        await account.save();
+        res.status(200).json(friendAccount);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 module.exports = {
     getAllAccounts,
     getAccountById,
@@ -95,5 +116,6 @@ module.exports = {
     updateAccountById,
     deleteAccountById,
     setLoginCookie,
-    getCookies
+    getCookies,
+    addFriend
 };

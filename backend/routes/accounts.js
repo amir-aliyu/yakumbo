@@ -8,7 +8,8 @@ const {
     deleteAccountById,
     updateAccountById,
     setLoginCookie,
-    getCookies
+    getCookies,
+    addFriend
 } = require('../controllers/accountController');
 
 // GET Requests
@@ -20,7 +21,7 @@ router.get('/:id', getAccountById);
 router.post('/', addAccount);
 router.post('/login', setLoginCookie);
 router.post('/register', addAccount);
-
+router.post('/:id/friends', addFriend);
 
 // PATCH Requests
 router.patch('/:id', updateAccountById);
