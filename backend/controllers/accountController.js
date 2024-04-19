@@ -109,6 +109,25 @@ const addFriend = async (req, res) => {
     }
 };
 
+// Delete a friend from the account
+const removeFriend = async (req, res) => {
+    try {
+        const account = await Account.findOne({ uuid: req.params.id }); // Account we want to remove a friend from
+        if (!account) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+        const friendIndex = account.friends.indexOf(req.body.friend); // Index of the friend we want to remove
+        if (friendIndex === -1) {
+            return res.status(404).json({ message: 'Friend not found in the account\'s friend list' });
+        }
+        account.friends.splice(friendIndex, 1);
+        await account.save();
+        res.status(200).json({ message: 'Friend removed successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 module.exports = {
     getAllAccounts,
     getAccountById,
@@ -117,5 +136,6 @@ module.exports = {
     deleteAccountById,
     setLoginCookie,
     getCookies,
-    addFriend
+    addFriend,
+    removeFriend
 };

@@ -9,7 +9,8 @@ const {
     updateAccountById,
     setLoginCookie,
     getCookies,
-    addFriend
+    addFriend,
+    removeFriend
 } = require('../controllers/accountController');
 
 // GET Requests
@@ -28,6 +29,8 @@ router.patch('/:id', updateAccountById);
 
 // DELETE Requests
 router.delete('/:id', deleteAccountById);
+router.delete('/:id/friends', removeFriend);
+
 
 
 module.exports = router;
