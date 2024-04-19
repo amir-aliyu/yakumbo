@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,7 +8,6 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loginPage, setLoginPage] = useState(true);
-    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -22,12 +20,11 @@ const LoginPage: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (loginPage) {
-            login();
-            navigate('/dashboard');
+            testLogin();
         }
         else {
-            register();
-            navigate('/dashboard');
+            testRegister();
+            console.log(name, email, password);
         }
     };
 
@@ -35,7 +32,7 @@ const LoginPage: React.FC = () => {
         setLoginPage(!loginPage);
     }
 
-    const login = useCallback(async () => {
+    const testLogin = useCallback(async () => {
       try {
         const response = await fetch('/api/accounts/login', {
           method: 'POST',
@@ -44,12 +41,11 @@ const LoginPage: React.FC = () => {
           },
           body: JSON.stringify({ username: email, password: password }),
         });
-        const data = await response.json();
+        const data = await response.text();
         if (response.ok) {
           console.log(data);
-          toast.success('Logged in successfully');
         } else {
-          throw new Error(data.message || 'Error logging in');
+          throw new Error(data || 'Error logging in');
         }
       }
       catch (error: any) {
@@ -58,7 +54,27 @@ const LoginPage: React.FC = () => {
     }
     , [email, password]);
 
-    const register = useCallback(async () => {
+    const testingCookie = async () => {
+        try {
+            const response = await fetch('/api/accounts/cookies', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+            });
+            const data = await response.text();
+            if (response.ok) {
+                console.log(data);
+            } else {
+                throw new Error(data || 'Error getting cookie');
+            }
+        }
+        catch (error: any) {
+            toast.error(error.message);
+        }
+    }
+
+    const testRegister = useCallback(async () => {
         try {
             const response = await fetch('/api/accounts/register', {
                 method: 'POST',
@@ -67,13 +83,11 @@ const LoginPage: React.FC = () => {
                 },
                 body: JSON.stringify({ name: name, username: email, password: password }),
             });
-            const data = await response.json();
+            const data = await response.text();
             if (response.ok) {
-                console.log("Register");
                 console.log(data);
-                toast.success('Registered successfully');
             } else {
-                throw new Error(data.message || 'Error registering');
+                throw new Error(data || 'Error registering');
             }
         }
         catch (error: any) {
@@ -83,7 +97,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <div>
-            <h1>{loginPage ? "Login Page" : "Register Page"}</h1>
+            <h1>{loginPage ? "Login Page" : "Registration Page"}</h1>
             <form onSubmit={handleSubmit}>
                 {!loginPage && <div>
                     <label>Name:</label>
@@ -99,7 +113,8 @@ const LoginPage: React.FC = () => {
                 </div>
                 <button type="submit">{loginPage ? "Login" : "Register"}</button>
             </form>
-            <button onClick={toggleLoginPage}>{loginPage ? "Click to Register Instead!" : "Click to Login Instead!"}</button>
+            {/* <button onClick={testingCookie}>TESTING</button> */}
+            <button onClick={toggleLoginPage}>{loginPage ? "Register" : "Login"}</button>
         </div>
     );
 };
