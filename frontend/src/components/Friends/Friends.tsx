@@ -160,7 +160,7 @@ return (
                                 </td>
                                 <td>{friend.name}</td>
                                 <td>
-                                    <a href={friend.dashboardLink} target="_blank" rel="noopener noreferrer">Dashboard</a>
+                                    <a href={"/"+friend.uuid} target="_blank" rel="noopener noreferrer">Dashboard</a>
                                 </td>
                                 <td>{friend.plantPoints}</td>
                                 <td>{friend.wateringStreak}</td>
