@@ -186,7 +186,7 @@ const handleEditPlantClick = async (plantId: string) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, type, wateringTime, image, owner }),
+        body: JSON.stringify({ name, type, wateringTime, image, owner:uuid }),
       });
       const data = await response.json();
       if (response.ok) {
