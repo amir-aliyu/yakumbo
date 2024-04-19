@@ -283,7 +283,8 @@ const handleEditPlantClick = async (plantId: string) => {
               <div className="col fw-bold fs-5">Type</div>
               <div className="col fw-bold fs-5">Watering Days</div>
               <div className="col fw-bold fs-5">Watering Streak</div>
-              <div className="col fw-bold fs-5 text-end">Actions</div>
+              {!isReadOnly && <div className="col fw-bold fs-5 text-end">Actions</div>}
+              {isReadOnly && <div className="col fw-bold fs-5 text-end"></div>}
               {/* <div className="col fw-bold fs-5 text-end">Actions</div> Right-aligned header */}
             </div>
           </li>
