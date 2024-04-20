@@ -56,9 +56,8 @@ const updateAccountById = async (req, res) => {
 
 // Update an account by uuid
 const updateAccountByUUID = async (req, res) => {
-    const { uuid, recipeOptIn } = req.body;
     try {
-        const account = await Account.findOneAndUpdate({ uuid: uuid }, { recipeOptIn: recipeOptIn }, { new: true });
+        const account = await Account.findOneAndUpdate({ uuid: req.body.uuid }, req.body, { new: true });
         if (!account) {
             return res.status(404).json({ message: 'Plant not found' });
         }
