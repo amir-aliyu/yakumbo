@@ -28,6 +28,7 @@ const Home: FC<HomeProps> = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('plants');
+        console.log(uuid);
         console.log(data);
         setPlants(data);
       } else {
@@ -56,7 +57,7 @@ const Home: FC<HomeProps> = () => {
       credentials: 'include', // Include credentials
     })
     .then(response => response.json())
-    .then(data => {setUuid(data.uuid);})
+    .then(data => {setUuid(data.uuid);console.log(data.uuid);})
     .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
