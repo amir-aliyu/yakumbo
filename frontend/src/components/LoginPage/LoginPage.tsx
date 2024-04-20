@@ -24,6 +24,7 @@ const LoginPage: React.FC = () => {
         if (loginPage) {
             await login();
             navigate('/dashboard');
+            window.location.reload();
         }
         else {
             register();
