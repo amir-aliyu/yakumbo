@@ -54,6 +54,20 @@ const updateAccountById = async (req, res) => {
     }
 };
 
+// Update an account by uuid
+const updateAccountByUUID = async (req, res) => {
+    const { uuid, recipeOptIn } = req.body;
+    try {
+        const account = await Account.findOneAndUpdate({ uuid: uuid }, { recipeOptIn: recipeOptIn }, { new: true });
+        if (!account) {
+            return res.status(404).json({ message: 'Plant not found' });
+        }
+        res.status(200).json(account);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 // Delete an account by ID
 const deleteAccountById = async (req, res) => {
     try {
@@ -98,6 +112,7 @@ module.exports = {
     getAccountById,
     addAccount,
     updateAccountById,
+    updateAccountByUUID,
     deleteAccountById,
     setLoginCookie,
     setLogoutCookie,

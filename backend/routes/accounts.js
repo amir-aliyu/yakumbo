@@ -7,6 +7,7 @@ const {
     addAccount,
     deleteAccountById,
     updateAccountById,
+    updateAccountByUUID,
     setLoginCookie,
     setLogoutCookie,
     getCookies
@@ -22,6 +23,7 @@ router.post('/', addAccount);
 router.post('/login', setLoginCookie);
 router.post('/register', addAccount);
 router.post('/logout', setLogoutCookie);
+router.post('/update-preferences', updateAccountByUUID);
 
 
 // PATCH Requests
