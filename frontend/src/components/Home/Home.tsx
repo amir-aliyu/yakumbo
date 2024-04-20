@@ -28,7 +28,6 @@ const Home: FC<HomeProps> = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('plants');
-        console.log(uuid);
         console.log(data);
         setPlants(data);
       } else {
@@ -47,7 +46,6 @@ const Home: FC<HomeProps> = () => {
     .then(response => response.json())
     .then(data => {setUuid(data.uuid);})
     .catch(error => console.error('Error:', error));
-    console.log(uuid);
   }, [uuid]);
 
   useEffect(() => {

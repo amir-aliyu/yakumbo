@@ -19,10 +19,10 @@ const LoginPage: React.FC = () => {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (loginPage) {
-            login();
+            await login();
             navigate('/dashboard');
         }
         else {

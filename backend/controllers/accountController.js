@@ -82,6 +82,11 @@ const setLoginCookie = async (req, res) => {
     res.status(200).json({ message: 'Login successful' });
 };
 
+const setLogoutCookie = async (req, res) => {
+    res.clearCookie('uuid');
+    res.status(200).json({ message: 'Logout successful' });
+}
+
 // Get cookies
 const getCookies = async (req, res) => {
     // Get all cookies
@@ -95,5 +100,6 @@ module.exports = {
     updateAccountById,
     deleteAccountById,
     setLoginCookie,
+    setLogoutCookie,
     getCookies
 };
