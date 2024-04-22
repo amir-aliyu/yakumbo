@@ -72,11 +72,26 @@ function stopAllCronJobs() {
 
 function parseDaysToCron(days) {
     const daysOfWeek = {
-        'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 
+        'Sunday': 0, 'Monday': 1, 'Tuesday': 2,
         'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6
     };
-    return days.split(' ').map(day => daysOfWeek[day]).join(',');
+
+    if (!days) {
+        console.error("CRON Error: wateringDays is undefined or not provided.");
+        return '*'; // This will default to running the job every day
+    }
+
+    // Trim the overall string, split by spaces, and then trim each individual day string
+    return days.trim().split(/\s+/).map(day => day.trim()).map(day => {
+        if (daysOfWeek.hasOwnProperty(day)) {
+            return daysOfWeek[day];
+        } else {
+            console.error("CRON Invalid day name:", day);
+            return null; // Handle invalid day names gracefully
+        }
+    }).filter(day => day !== null).join(',');
 }
+
 
 // Function to schedule cron jobs for plant watering
 async function schedulePlantWateringJobs(wss) {
@@ -88,7 +103,8 @@ async function schedulePlantWateringJobs(wss) {
 
     // Schedule new jobs
     plants.forEach((plant) => {
-        const daysCronFormat = parseDaysToCron(plant.wateringDays);
+        console.log(`Scheduling: ${plant.name}`)
+        const daysCronFormat = parseDaysToCron(plant.wateringTime);
         const job = cron.schedule(`0 8 * * ${daysCronFormat}`, () => { // Runs at 08:00 on specified days
             console.log(`------ Notification: Time to water your ${plant.name}!`)
             console.log(`clients: ${wss.clients.size}`)
@@ -100,7 +116,6 @@ async function schedulePlantWateringJobs(wss) {
                     console.log(`Notification sent for ${plant.name}`);
             });
             // Send email notification
-            
             // setup variables for plant email filepath and name/watering times
             const emailFilePath = "./utilities/plantEmail.html";
             let plantName = `${plant.name}`
@@ -110,10 +125,9 @@ async function schedulePlantWateringJobs(wss) {
             let currentStreak = `${plant.streak}`
            
             // Change 'Email' for second sprint
-            // sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
-              //           console.error('Failed to send email:', error);
-             //});
-
+            sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
+                         console.error('Failed to send email:', error);
+            });
         });
         cronJobs.push(job); // Add new job to the list
     });
