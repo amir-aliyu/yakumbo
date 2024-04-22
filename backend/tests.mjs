@@ -7,10 +7,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-test('that 1 is equal 1', () => {
-  assert.strictEqual(1, 1);
-});
-
 // Boolean for whether we are connected to the database
 let connected = false;
 test('Test if we are connected to the database', async () => {
