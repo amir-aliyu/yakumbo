@@ -96,7 +96,6 @@ const addFriend = async (req, res) => {
         console.log(friendAccount.uuid);
         const friendUUID = friendAccount ? friendAccount.uuid : null;
 
-
         const account = await Account.findOne({ uuid: req.params.id });
         if (!account) {
             return res.status(404).json({ message: 'Account not found' });
