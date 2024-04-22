@@ -10,7 +10,8 @@ const {
     setLoginCookie,
     getCookies,
     addFriend,
-    removeFriend
+    removeFriend,
+    setLogoutCookie
 } = require('../controllers/accountController');
 
 // GET Requests
@@ -21,6 +22,7 @@ router.get('/:id', getAccountById);
 // POST Requests
 router.post('/', addAccount);
 router.post('/login', setLoginCookie);
+router.post('/logout', setLogoutCookie)
 router.post('/register', addAccount);
 router.post('/:id/friends', addFriend);
 

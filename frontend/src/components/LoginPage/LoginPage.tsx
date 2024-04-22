@@ -57,6 +57,28 @@ const LoginPage: React.FC = () => {
     }
     , [email, password]);
 
+    // Logout
+    const testLogout = useCallback(async () => {
+        try {
+            const response = await fetch('/api/accounts/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.text();
+            if (response.ok) {
+                // Navigate to /dashboard
+                window.location.href = '/dashboard';
+            } else {
+                throw new Error(data || 'Error logging out');
+            }
+        }
+        catch (error: any) {
+            toast.error(error.message);
+        }
+    }, []);
+
     const testingCookie = async () => {
         try {
             const response = await fetch('/api/accounts/cookies', {
@@ -126,7 +148,7 @@ const LoginPage: React.FC = () => {
                 <button onClick={handleSubmit} type="submit" style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 40px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '20px' }}>{loginPage ? "Login" : "Register"}</button>
             </form>
             <button onClick={toggleLoginPage} style={{ backgroundColor: '#008CBA', color: 'white', padding: '10px 40px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}>{loginPage ? "No account? Register here" : "Have an account? Login here"}</button>
-
+            <button onClick={testLogout} style={{ backgroundColor: '#f44336', color: 'white', padding: '10px 40px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px', marginLeft: '10px' }}>Logout</button>
             {/* <button onClick={testingCookie}>TESTING</button> */}
         </div>
     );
