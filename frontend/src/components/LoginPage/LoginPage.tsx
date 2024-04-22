@@ -96,7 +96,7 @@ const LoginPage: React.FC = () => {
     }, [name, email, password]);
 
     return (
-        <div>d
+        <div>
             <h1>{loginPage ? "Login Page" : "Registration Page"}</h1>
             <form onSubmit={handleSubmit}>
                 {!loginPage && <div>
