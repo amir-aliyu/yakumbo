@@ -43,6 +43,9 @@ const LoginPage: React.FC = () => {
         });
         const data = await response.text();
         if (response.ok) {
+            
+            // Navigate to /dashboard
+            window.location.href = '/dashboard';
           console.log(data);
         } else {
           throw new Error(data || 'Error logging in');
@@ -96,25 +99,35 @@ const LoginPage: React.FC = () => {
     }, [name, email, password]);
 
     return (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h1>{loginPage ? "Login Page" : "Registration Page"}</h1>
-            <form onSubmit={handleSubmit}>
-                {!loginPage && <div>
-                    <label>Name:</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                </div>}
-                <div>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={handleEmailChange} />
+            <form onSubmit={handleSubmit} >
+                {!loginPage && (
+                    <div>
+                        <label>Name:</label>
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div>
+                        <label style={{marginRight: '20px'}}>Email: </label>
+                        <input type="email" value={email} onChange={handleEmailChange} />
+                    </div>
                 </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={handlePasswordChange} />
+                <div style={{ display: 'flex', justifyContent: 'center' , marginTop: '10px'}}>
+                    <div>
+                        <label style={{marginRight: '20px'}}>Password: </label>
+                        <input type="password" value={password} onChange={handlePasswordChange} />
+                    </div>
                 </div>
-                <button type="submit">{loginPage ? "Login" : "Register"}</button>
+                <br/>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                </div>
+                <button onClick={handleSubmit} type="submit" style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 40px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '20px' }}>{loginPage ? "Login" : "Register"}</button>
             </form>
+            <button onClick={toggleLoginPage} style={{ backgroundColor: '#008CBA', color: 'white', padding: '10px 40px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}>{loginPage ? "No account? Register here" : "Have an account? Login here"}</button>
+
             {/* <button onClick={testingCookie}>TESTING</button> */}
-            <button onClick={toggleLoginPage}>{loginPage ? "Register" : "Login"}</button>
         </div>
     );
 };
