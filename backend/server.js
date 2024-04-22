@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const plantRoutes = require('./routes/plants');
 const accountRoutes = require('./routes/accounts');
+const recipeRoutes = require('./routes/recipe');
 const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
 
 const PORT = process.env.PORT || 4000;
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/plants', plantRoutes)
 app.use('/api/accounts', accountRoutes)
+app.use('/api/recipe', recipeRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)
