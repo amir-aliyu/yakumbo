@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const Plant = require('../models/plantModel');
+const Account = require('../models/accountModel');
 const nodemailer = require('nodemailer');
 const fs = require('fs').promises; // Import fs module with promises
 
@@ -10,6 +11,16 @@ async function getPlantsFromDB() {
     } catch (error) {
         console.error("Failed to fetch plants from DB:", error);
         throw error; // Rethrow or handle as needed
+    }
+}
+
+async function fetchOwnerDetails(ownerId) {
+    try {
+        const user = await Account.findById(ownerId);
+        return user;
+    } catch (error) {
+        console.error('---- Failed to fetch owner details');
+        return null;
     }
 }
 
@@ -34,7 +45,7 @@ async function readHtmlFile(filePath, name, time, id, currentStreak) {
 }
 
 // Can possibly use 'to' for when we add accounts
-async function sendEmail(to, subject, htmlFilePath, name, time, id, currentStreak) {
+async function sendEmail(recipient, subject, htmlFilePath, name, time, id, currentStreak) {
     try {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -49,7 +60,7 @@ async function sendEmail(to, subject, htmlFilePath, name, time, id, currentStrea
 
         let info = await transporter.sendMail({
             from: 'csds393.plant.people@gmail.com',
-            to: 'saa210@case.edu',
+            to: recipient,
             //to: 'mfc56@case.edu, jsy47@case.edu, eje55@case.edu, jcd171@case.edu, saa210@case.edu, axo193@case.edu', // Hard coding this for just for sprint 1
             subject: subject,
             html: htmlContent // use the HTML content from the file 
@@ -95,42 +106,48 @@ function parseDaysToCron(days) {
 
 // Function to schedule cron jobs for plant watering
 async function schedulePlantWateringJobs(wss) {
-    console.log(`schedulePlantWateringJobs ${wss}`)
+    console.log(`Starting schedulePlantWateringJobs for WebSocket size: ${wss.clients.size}`);
 
     stopAllCronJobs(); // Stop existing jobs
 
     const plants = await getPlantsFromDB(); // Retrieve plants from DB
 
     // Schedule new jobs
-    plants.forEach((plant) => {
-        console.log(`Scheduling: ${plant.name}`)
+    for (const plant of plants) {
+        console.log(`Scheduling: ${plant.name}, days: ${plant.wateringTime}`)
+        const plantOwner = await fetchOwnerDetails(plant.owner);
+        if (plantOwner) {
+            console.log(`identified owner: ${plantOwner.username}`)
+        }
+
         const daysCronFormat = parseDaysToCron(plant.wateringTime);
-        const job = cron.schedule(`0 8 * * ${daysCronFormat}`, () => { // Runs at 08:00 on specified days
+        const job = cron.schedule(`0 9 * * ${daysCronFormat}`, async () => { // Runs at 9:00am on specified days
             console.log(`------ Notification: Time to water your ${plant.name}!`)
-            console.log(`clients: ${wss.clients.size}`)
+            console.log(`clients listening: ${wss.clients.size}`)
             wss.clients.forEach((client) => {
-                    client.send(JSON.stringify({
-                        type: 'notification',
-                        message: `Time to water your ${plant.name}!`
-                    }));
-                    console.log(`Notification sent for ${plant.name}`);
+                client.send(JSON.stringify({
+                    type: 'notification',
+                    message: `Time to water your ${plant.name}!`
+                }));
+                console.log(`Notification sent for ${plant.name}`);
             });
             // Send email notification
-            // setup variables for plant email filepath and name/watering times
             const emailFilePath = "./utilities/plantEmail.html";
-            let plantName = `${plant.name}`
-            let plantType = `${plant.type}` //store the plant type
-            let plantWateringTime = `${plant.wateringTime}`
-            let plantID = `${plant.id}`
-            let currentStreak = `${plant.streak}`
-           
-            // Change 'Email' for second sprint
-            sendEmail('Email', 'Plant Watering Reminder', emailFilePath, plantName, plantWateringTime, plantID, currentStreak).catch(error => {
-                         console.error('Failed to send email:', error);
-            });
+            let plantName = `${plant.name}`;
+            let plantType = `${plant.type}`; // Store the plant type
+            let plantWateringTime = `${plant.wateringTime}`;
+            let plantID = `${plant._id}`; // Assuming you are using MongoDB that uses `_id`
+            let currentStreak = `${plant.streak}`;
+
+            try {
+                await sendEmail(plantOwner.username, 'Plant Watering Reminder', emailFilePath, plantName, plantType, plantWateringTime, plantID, currentStreak);
+            } catch (error) {
+                console.error('Failed to send email:', error);
+            }
         });
         cronJobs.push(job); // Add new job to the list
-    });
+    }
 }
+
 
 module.exports = { schedulePlantWateringJobs };

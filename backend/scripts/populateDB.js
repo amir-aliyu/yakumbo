@@ -24,25 +24,16 @@ const recipes = [
     {
         name: "Garden Patch Pasta Salad",
         ingredients: ["Tomato Plant", "Daisy", "Carrots", "Peony"],
-        recipeHtml: "<p>A refreshing pasta salad perfect for any garden party. Begin by boiling diced 'Carrots' until tender. Mix with cooked pasta shells and fresh 'Tomato Plant' chunks. Garnish with 'Daisy' petals and 'Peony' petals for a colorful, edible delight. Drizzle with olive oil and a squeeze of lemon before serving.</p>"
+        recipeHtml: "./utilities/tomatoSoup.html"
     },
-    {
-        name: "Bonsai Tree Stir-Fry",
-        ingredients: ["Bonsai Tree", "Hydrangea", "Snake Plant", "Spider Plant"],
-        recipeHtml: "<p>Experience a unique stir-fry with a blend of horticultural wonders. Heat a skillet and add thinly sliced 'Snake Plant' strips and 'Spider Plant' shoots. Once softened, add 'Bonsai Tree' leaves and stir until they just begin to wilt. Toss in a handful of 'Hydrangea' blossoms for a touch of sweetness. Serve hot, seasoned with soy sauce and ginger.</p>"
-    },
-    {
-        name: "Forest Floor Roast",
-        ingredients: ["Carrots", "Hydrangea", "Daisy", "Peony"],
-        recipeHtml: "<p>This hearty roast combines the earthy flavors of the garden. Layer a baking dish with 'Carrots' and 'Hydrangea' roots. Top with 'Daisy' buds and roast until everything is tender. Sprinkle with 'Peony' petals before serving to add a floral aroma and vibrant color to this rustic dish.</p>"
-    }
+
 ];
 
 const insertData = async () => {
     try {
         await Recipe.deleteMany();  // Clears all existing entries in the Recipe collection
         await Recipe.insertMany(recipes);  // Inserts new entries into the Recipe collection
-        console.log("Placeholder data successfully inserted.");
+        console.log("Success");
     } catch (error) {
         console.error("Error inserting data:", error);  // Logs any errors during the insertion process
     } finally {

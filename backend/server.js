@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const WebSocket = require('ws');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const cron = require('node-cron');
 
 require('dotenv').config();
 
@@ -54,8 +55,16 @@ mongoose.connect(process.env.ATLAS_URI)
             });
             ws.on('close', () => console.log('Client disconnected'));
         });
+        
+        // Refresh and schedule cron jobs for plant watering at 8:55AM
+        cron.schedule('55 8 * * *', () => {
+            console.log("Refreshing plant watering schedules...");
+            schedulePlantWateringJobs(wss)
+                .then(() => console.log("Plant watering schedules refreshed."))
+                .catch(console.error);
+        });
 
-        // Schedule cron jobs for plant watering
+        // initial scheduling of cron jobs for plant watering
         schedulePlantWateringJobs(wss).catch(console.error);
     })
     .catch((error) => {
