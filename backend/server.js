@@ -10,7 +10,7 @@ require('dotenv').config();
 const plantRoutes = require('./routes/plants');
 const accountRoutes = require('./routes/accounts');
 const recipeRoutes = require('./routes/recipe');
-const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
+const { schedulePlantWateringJobs, sendRecipeOfTheDay } = require('./utilities/cronScheduler');
 
 const PORT = process.env.PORT || 4000;
 const WS_PORT = process.env.WS_PORT || 8080; // WebSocket port
@@ -57,6 +57,7 @@ mongoose.connect(process.env.ATLAS_URI)
         });
         
         // Refresh and schedule cron jobs for plant watering at 8:55AM
+        //      note. all plant notifications will be scheduled for 9:00AM
         cron.schedule('55 8 * * *', () => {
             console.log("Refreshing plant watering schedules...");
             schedulePlantWateringJobs(wss)
@@ -64,8 +65,17 @@ mongoose.connect(process.env.ATLAS_URI)
                 .catch(console.error);
         });
 
+        // send recipe of the day at 9:05AM
+        cron.schedule('05 9 * * *', () => {
+            console.log("Sending Recipe Of The Day...");
+            sendRecipeOfTheDay()
+                .then(() => console.log("Recipe OTD Complete."))
+                .catch(console.error);
+        });
+
         // initial scheduling of cron jobs for plant watering
         schedulePlantWateringJobs(wss).catch(console.error);
+
     })
     .catch((error) => {
         console.error('MongoDB connection error:', error);

@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const Plant = require('../models/plantModel');
 const Account = require('../models/accountModel');
+const Recipe = require('../models/recipeModel');
 const nodemailer = require('nodemailer');
 const fs = require('fs').promises; // Import fs module with promises
 
@@ -149,5 +150,83 @@ async function schedulePlantWateringJobs(wss) {
     }
 }
 
+// Function to send a recipe of the day email to users who can use their plants as ingredients.
+async function sendRecipeOfTheDay() {
+    console.log("TRIGGER: sendRecipeOfTheDay()")
+    try {
+        // Step 1: Select a random recipe
+        const recipeOfTheDay = await selectRandomRecipe();
+        console.log(`Recipe of the Day: ${recipeOfTheDay.name}`)
 
-module.exports = { schedulePlantWateringJobs };
+        // Step 2: Find all accounts
+        const accounts = await Account.find({});
+
+        // Step 3: Iterate through each account to check for matching plant ingredients
+        for (const account of accounts) {
+            console.log(`Checking account: ${account.username}`);
+
+             // Check if the account has opted in for the recipe emails
+             if (!account.recipeOptIn) {
+                console.log(`User ${account.name} has not opted in for recipes.`);
+                continue;  // Skip this account as they have not opted in for recipes
+            }
+
+            const userPlants = await Plant.find({ owner: account._id });
+            if (userHasRequiredIngredients(userPlants, recipeOfTheDay.ingredients)) {
+                //Send email if they have the necessary ingredients
+                await sendRecipeToUser(account.username, recipeOfTheDay);
+            }
+        }
+    } catch (error) {
+        console.error('Failed to send recipe of the day:', error);
+    }
+}
+
+// randomly select recipe
+async function selectRandomRecipe() {
+    const recipes = await Recipe.find({});
+    const randomIndex = Math.floor(Math.random() * recipes.length);
+    return recipes[randomIndex];
+}
+
+// Checks if the user has all required ingredients among their plants.
+function userHasRequiredIngredients(userPlants, ingredients, user) {
+    const userPlantTypes = userPlants.map(plant => plant.plantType.toLowerCase());
+    let hasAllIngredients = true;
+    for (const ingredient of ingredients) {
+        if (!userPlantTypes.includes(ingredient.toLowerCase())) {
+            console.log(`User doesn't have plant ${ingredient} needed for recipe`);
+            hasAllIngredients = false;
+        }
+    }
+    return hasAllIngredients;
+}
+
+//Sends an email to a user with the recipe of the day.
+async function sendRecipeToUser(email, recipe) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'csds393.plant.people@gmail.com',
+            pass: 'jqxm ooji zqgr zawu' // This is from App Passwords 
+        }
+    });
+
+    const htmlContent = await fs.readFile(recipe.recipeHtml, 'utf8');
+
+    let mailOptions = {
+        from: 'csds393.plant.people@gmail.com',
+        to: email,
+        subject: 'Recipe of the Day!',
+        html: `<h1>The Plant People's Recipe of the Day <br> ${recipe.name}</h1> <br> ${htmlContent}`
+    };
+
+    try {
+        const response = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', response);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+}
+
+module.exports = { schedulePlantWateringJobs, sendRecipeOfTheDay };
