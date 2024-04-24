@@ -279,7 +279,17 @@ const handleEditPlantClick = async (plantId: string) => {
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
         <p className="m-0 fs-3">Plant List</p>
-        {!isReadOnly && <button onClick={handleAddPlantClick} className="btn btn-light ms-auto text-dark">Add Plant</button>}
+        {!uuid && 
+          <button
+            className="btn btn-error"
+            onClick={() => {
+                window.location.href = "/login";
+            }}
+          >
+            You aren't logged in! Click here to log in or register.
+          </button>
+        }
+        {!isReadOnly && uuid && <button onClick={handleAddPlantClick} className="btn btn-light ms-auto text-dark">Add Plant</button>}
       </div>
       <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
         <ul id="plantsList" className="list-group">
