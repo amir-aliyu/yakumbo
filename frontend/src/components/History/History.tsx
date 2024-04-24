@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import $ from 'jquery'; 
 
 const History = () => {
     // Sample data for the table
@@ -11,8 +12,8 @@ const History = () => {
         },
         {
             _id: 1234,
-                name: "test2",
-                recipeHtml: "test/test"
+            name: "test2",
+            recipeHtml: "test/test"
         }
     ]);
 
@@ -45,7 +46,7 @@ const History = () => {
                                     </div>
                                     <div className="collapse" id={recipe.name}>
                                         <div className="card card-body">
-                                            LOAD HTML FILE HERE
+                                            {/* {$(function(){ $("#includedContent").load(recipe.recipeHtml)})} */}
                                         </div>
                                     </div>
                                 </div>
