@@ -31,8 +31,6 @@ const History = () => {
           });
           const data = await response.json();
           if (response.ok) {
-            console.log('plants');
-            console.log(data);
             setPlants(data);
           } else {
             throw new Error(data.message || 'Error fetching plants');
@@ -51,18 +49,16 @@ const History = () => {
         .then(data => {setUuid(data.uuid);})
         .catch(error => console.error('Error:', error));
         fetchPlants();
-        console.log(uuid);
     }, [uuid, setUuid]);
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/recipes/', {
+        fetch('http://localhost:4000/api/recipe/', {
             method: 'GET',
             credentials: 'include', // Include credentials
         })
         .then(response => response.json())
-        .then(data => {setRecipes(data);})
+        .then(data => {console.log(data)/*setRecipes(data)*/;})
         .catch(error => console.error('Error:', error));
-        console.log(recipes);
     }, [recipes, setRecipes]);
 
     function hasAllPlants(ingredients: string[]): boolean {
