@@ -68,33 +68,43 @@ const Preferences = () => {
             <p className="m-0 fs-3">Preferences</p>
           </div>
           <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
-            <h5 className="card-title">Recipe Emails</h5>
-            <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }} onSubmit={handleSubmit}>
-              <Select
-                native
-                value={recipeOptInValue}
-                onChange={handleChange}
-                inputProps={{
-                  name: "recipeOptIn",
-                  id: "recipeOptIn",
-                }}
-                sx = {{ width: "50%", height: "50px" }}
-                className="form-select"
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                <option value={1}>Yes, I want to receive recipe emails</option>
-                <option value={0}>No, I do not want to receive recipe emails</option>
-              </Select>
-              <Box sx={{ width: "100%" }} />
-              <button type="submit" className="btn btn-primary mt-4">
-                Save
-              </button>
-              <button type="reset" className="btn btn-danger mt-4 ms-2">
-                Cancel
-              </button>
-            </Box>
+            <ul className="list-group">
+              <li className="list-group-item bg-light">
+              <h5 className="card-title">Recipe Emails</h5>
+              <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }} onSubmit={handleSubmit}>
+                <Select
+                  native
+                  value={recipeOptInValue}
+                  onChange={handleChange}
+                  inputProps={{
+                    name: "recipeOptIn",
+                    id: "recipeOptIn",
+                  }}
+                  sx = {{ width: "50%", height: "50px" }}
+                  className="form-select"
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value={1}>Yes, I want to receive recipe emails</option>
+                  <option value={0}>No, I do not want to receive recipe emails</option>
+                </Select>
+                <Box sx={{ width: "100%" }} />
+                <button type="submit" className="btn btn-primary mt-4">
+                  Save
+                </button>
+                <button type="reset" className="btn btn-danger mt-4 ms-2">
+                  Cancel
+                </button>
+              </Box>
+              </li>
+              <li className="list-group-item bg-light">
+                <div className="fw-bold d-flex align-items-center">
+                  <h5 className="card-title">Recipe History</h5>
+                  <Link className="ms-auto" to="/History"><button className="btn btn-primary ms-auto">View History</button></Link>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
