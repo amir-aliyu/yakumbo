@@ -1,15 +1,29 @@
 const Recipe = require('../models/recipeModel');
-
+const fs = require('fs').promises; // Import fs promises to handle file operations asynchronously
+const path = require('path'); // Import path module to resolve file paths
 
 // Get all recipes
 const getAllRecipes = async (req, res) => {
     try {
-        const recipes = await Recipe.find();
-        res.status(200).json(recipes);
+        let recipes = await Recipe.find(); // Retrieve all recipes from the database
+        // Map over each recipe to replace the path with actual HTML content
+        recipes = await Promise.all(recipes.map(async (recipe) => {
+            try {
+                // Resolve the path to the HTML file and read its contents
+                const fullPath = path.resolve(__dirname, '..', recipe.recipeHtml); // Move up one directory then into utilities
+                const htmlContent = await fs.readFile(fullPath, 'utf8'); // Read file as UTF-8 text
+                return { ...recipe.toObject(), recipeHtml: htmlContent }; // Replace the path with the content
+            } catch (error) {
+                console.error(`Error reading HTML file for recipe ${recipe.name}: ${error.message}`);
+                return { ...recipe.toObject(), recipeHtml: "Error loading HTML content." }; // Handle missing or inaccessible files
+            }
+        }));
+        res.status(200).json(recipes); // Send the modified list of recipes with HTML content
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message }); // Handle other errors, like database issues
     }
 };
+
 
 // Get recipes by ingredient list
 const getRecipesByIngredient = async (req, res) => {
