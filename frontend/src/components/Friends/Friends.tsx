@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-
+import plantModel from "../../../../backend/models/plantModel";
 
 const Friends = () => {
     // Sample data for the table
@@ -23,6 +23,19 @@ useEffect(() => {
     console.log(uuid);
   }, [uuid]);
 
+const getWateringStreak = async (uuid: string) => {
+    // Get the list of all plants
+    const response = await fetch(`http://localhost:4000/api/plants/list/${uuid}`);
+    const data = await response.json();
+    console.log("Plants data: ", data);
+    var streakSum = 0;
+    // For each object in the array of plants, add its streak to the sum
+    data.forEach((plant: any) => {
+        streakSum += plant.streak;
+    });
+    return streakSum;
+}
+
 // Function to get the friends
 const getFriends = async () => { // Fetch friends data
     // If uuid isn't set, return early
@@ -35,14 +48,15 @@ const getFriends = async () => { // Fetch friends data
         const friendPromises = friendUuids.map(async (friendUuid: string) => {
             const friendResponse = await fetch(`http://localhost:4000/api/accounts/${friendUuid}`);
             const friendData = await friendResponse.json();
+            const streak = await getWateringStreak(friendUuid);
             return {
                 id: friendData.id,
                 name: friendData.name,
                 // TODO: Add profilePicture, dashboardLink, plantPoints, wateringStreak to the account schema
                 profilePicture: friendData.profilePicture,
                 dashboardLink: friendData.dashboardLink,
-                plantPoints: friendData.plantPoints,
-                wateringStreak: friendData.wateringStreak,
+                plantPoints: streak * 10, // 10 points per watering streak? Adjust as needed
+                wateringStreak: streak,
                 uuid: friendUuid
             };
         });
@@ -82,6 +96,10 @@ const addFriend = async () => {
         if (!response.ok) {
         throw new Error(data.message || 'Failed to add friend');
         } else {
+            // Get the friend's list of plants
+            const friendResponse = await fetch(`http://localhost:4000/api/accounts/${data.uuid}`);
+            const friendData = await friendResponse.json();
+            const streak = await getWateringStreak(data.uuid);
             setFriendsData(prevData => [ // Add the new friend to the state
                 ...prevData,
                 {
@@ -89,8 +107,8 @@ const addFriend = async () => {
                     name: data.name,
                     profilePicture: "url_to_profile_image",
                     dashboardLink: "/dashboard",
-                    plantPoints: 0,
-                    wateringStreak: 0,
+                    plantPoints: streak*10, // 10 points per watering streak? Adjust as needed
+                    wateringStreak: streak,
                     uuid: data.uuid
                 }
             ]);
