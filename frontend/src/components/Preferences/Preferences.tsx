@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
-const Preferences = async () => {
+const Preferences = () => {
     const navigate = useNavigate();
     const [recipeOptIn, setRecipeOptIn] = useState(true);
     const [recipeOptInValue, setRecipeOptInValue] = useState(

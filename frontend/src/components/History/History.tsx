@@ -102,6 +102,7 @@ const History = () => {
                                     </div>
                                     <div className="collapse" id={recipe.name}>
                                         <div className="card card-body">
+                                            recipe here
                                             {/* {$(function(){ $("#includedContent").load(recipe.recipeHtml)})} */}
                                         </div>
                                     </div>
