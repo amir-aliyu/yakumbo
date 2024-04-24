@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
-const Preferences = () => {
+const Preferences = async () => {
     const navigate = useNavigate();
     const [recipeOptIn, setRecipeOptIn] = useState(true);
     const [recipeOptInValue, setRecipeOptInValue] = useState(
@@ -59,6 +59,8 @@ const Preferences = () => {
             console.error('Error:', error);
         }
     };
+
+    const htmlContent = await fs.readFile(recipe.recipeHtml, 'utf8');
 
     return (
       <div className="container">
