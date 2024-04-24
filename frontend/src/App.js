@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Layout from './components/Routing/Layout.tsx';
 import Friends from './components/Friends/Friends.tsx';
 import Preferences from './components/Preferences/Preferences.tsx';
+import History from './components/History/History.tsx';
 import { toast } from 'react-toastify';
 import React, { useEffect, } from 'react';
 import LoginPage from './components/LoginPage/LoginPage.tsx';
@@ -50,7 +51,7 @@ function App() {
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
 					<Route path="/friends" element={<Friends />} />
-					
+					<Route path="/history" element={<History />} />
 					<Route path="/preferences" element={<Preferences />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="*" element={<Home />} />
