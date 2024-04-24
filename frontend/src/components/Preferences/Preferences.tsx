@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Box, Select, TextField, Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const Preferences = () => {
     const navigate = useNavigate();
