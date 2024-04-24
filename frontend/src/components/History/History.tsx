@@ -10,14 +10,13 @@ const History = () => {
 
     return (
         <div className="container">
-            <h1 className="mt-4 mb-4 fw-bold">My Friends</h1>
+            <h1 className="mt-4 mb-4 fw-bold">Recipe History</h1>
             <div className="card mt-4 shadow">
                 <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
-                    <p className="m-0 fs-3">Friends List</p>
-                    <button className="btn btn-light ms-auto text-dark">Add Friend</button>
+                    <p className="m-0 fs-3">History</p>
                 </div>
                 <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
-                    
+                    <p>date - view recipe - have plant?</p>
                 </div>
             </div>
         </div>
