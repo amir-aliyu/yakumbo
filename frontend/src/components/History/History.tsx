@@ -86,7 +86,7 @@ const History = () => {
                         <li className="list-group-item bg-light">
                             <div className="row">
                                 <div className="col fw-bold fs-5">Recipe</div>
-                                <div className="col fw-bold fs-5 text-end">Plant Owned</div>
+                                <div className="col fw-bold fs-5 text-end">Plants Owned</div>
                             </div>
                         </li>
                         {recipes.map((recipe: any) => (
@@ -98,7 +98,7 @@ const History = () => {
                                         </button>
                                     </div>
                                     <div className="col text-end">
-                                        <input className="form-check-input" type="checkbox" checked={hasAllPlants(recipe.ingredients)} disabled/>
+                                        {hasAllPlants(recipe.ingredients) ? "Yes" : "No"}
                                     </div>
                                     <div className="collapse" id={recipe.name}>
                                         <div className="card card-body">
