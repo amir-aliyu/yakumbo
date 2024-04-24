@@ -4,15 +4,7 @@ import $ from 'jquery';
 
 const History = () => {
     // Sample data for the table
-    const [recipes, setRecipes] = useState<any[]>(
-    [
-        {
-            _id: 123,
-            name: "Tomato Soup",
-            ingredients: ['Tomato'],
-            recipeHtml: "utilities/tomatoSoup.html"
-        }
-    ]);
+    const [recipes, setRecipes] = useState<any[]>([]);
     const [uuid, setUuid] = React.useState(null);
     const [plants, setPlants] = useState<any[]>([]);
 
@@ -57,7 +49,7 @@ const History = () => {
             credentials: 'include', // Include credentials
         })
         .then(response => response.json())
-        .then(data => {console.log(data)/*setRecipes(data)*/;})
+        .then(data => {setRecipes(data)})
         .catch(error => console.error('Error:', error));
     }, [recipes, setRecipes]);
 
@@ -89,14 +81,14 @@ const History = () => {
                             <li key={recipe._id} className="list-group-item">
                                 <div className="row">
                                     <div className="col">
-                                        <button className="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={"#" + recipe.name}>
+                                        <button className="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={"#" + recipes.indexOf(recipe.name) + "recipe"}>
                                             {recipe.name}
                                         </button>
                                     </div>
                                     <div className="col text-end">
                                         {hasAllPlants(recipe.ingredients) ? "Yes" : "No"}
                                     </div>
-                                    <div className="collapse" id={recipe.name}>
+                                    <div className="collapse" id={recipes.indexOf(recipe.name) + "recipe"}>
                                         <div className="card card-body">
                                             recipe here
                                             {/* {$(function(){ $("#includedContent").load(recipe.recipeHtml)})} */}
