@@ -267,7 +267,14 @@ const handleEditPlantClick = async (plantId: string) => {
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4 fw-bold">{friendName} Plants</h1>
+      <div className="d-flex justify-content-between align-items-center">
+        <h1 className="mt-4 fw-bold">{friendName} Plants</h1>
+        {isReadOnly && (
+          <div className="text-end mt-4">
+            <a href="/dashboard" className="btn btn-primary">Go Back to Dashboard</a>
+          </div>
+        )}
+      </div>
     {/* Plant List */}
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
