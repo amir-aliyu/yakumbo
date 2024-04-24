@@ -60,8 +60,6 @@ const Preferences = async () => {
         }
     };
 
-    const htmlContent = await fs.readFile(recipe.recipeHtml, 'utf8');
-
     return (
       <div className="container">
         <h1 className="mt-4 mb-4 fw-bold">My Preferences</h1>
