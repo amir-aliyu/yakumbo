@@ -61,7 +61,8 @@ const Preferences = () => {
         try {
           // Convert the file to base64
           const base64 = await imageToBase64(file);
-          console.log(base64);
+          setProfilePic(base64)
+          console.log("set profile photo locally");
         } catch (error: any) {
           console.error('Error converting image:', error);
         }
@@ -70,6 +71,9 @@ const Preferences = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log("!!!!!!SUBMIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log(profilePic == null)
+        console.log("!!!!!!!DONE!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         try {
             const response = await fetch('http://localhost:4000/api/accounts/update-preferences', {
                 method: 'POST',
@@ -79,6 +83,7 @@ const Preferences = () => {
                 body: JSON.stringify({
                     uuid: uuid,
                     recipeOptIn: recipeOptIn,
+                    image: profilePic,
                 }),
             });
             if (response.ok) {
@@ -128,17 +133,6 @@ const Preferences = () => {
               <button type="reset" className="btn btn-danger mt-4 ms-2">
                 Cancel
               </button>
-            </Box>
-            <Box component="form" onSubmit={handleSubmit}>
-                <TextField
-                    fullWidth
-                    type="file"
-                    onChange={handleFileSelection}
-                />
-                {profilePic && (
-                    <img src={profilePic} alt="Profile" style={{ width: 100, height: 100 }} />
-                )}
-                <Button type="submit">Save Preferences</Button>
             </Box>
           </div>
         </div>

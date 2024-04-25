@@ -18,6 +18,10 @@ const accountSchema = new Schema({
         type: Boolean,
         default: true,
         required: true,
+    },
+    image: {
+        type: String,
+        required: false,
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
