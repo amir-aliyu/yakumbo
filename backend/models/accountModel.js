@@ -18,7 +18,7 @@ const accountSchema = new Schema({
         type: Boolean,
         default: true,
         required: true,
-    }
+    },
     friends: [{
         type: String,
     }]
