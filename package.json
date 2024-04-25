@@ -4,8 +4,11 @@
   },
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "build": "concurrently \"npm run build:backend\" \"npm run build:frontend\"",
     "start:backend": "cd backend && npm install && npm start",
     "start:frontend": "cd frontend && npm install && npm start",
+    "build:backend": "cd backend && npm install",
+    "build:frontend": "cd frontend && npm install",
     "test": "cd backend && node tests.mjs"
   }
 }
