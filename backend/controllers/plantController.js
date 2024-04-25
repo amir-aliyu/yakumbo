@@ -53,6 +53,8 @@ const updatePlantById = async (req, res) => {
         if (!plant) {
             return res.status(404).json({ message: 'Plant not found' });
         }
+        plant.set(req.body);
+        await plant.save();
         res.status(200).json(plant);
     } catch (error) {
         res.status(400).json({ error: error.message });

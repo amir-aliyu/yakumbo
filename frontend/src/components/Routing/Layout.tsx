@@ -40,7 +40,7 @@ const Layout = () => {
                     </form>
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
-                        <Link to="/dashboard">Dashboard</Link>                    
+                        <Link to="/dashboard">Dashboard</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/friends">Friends</Link>
