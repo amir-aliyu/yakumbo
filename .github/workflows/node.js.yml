@@ -3,7 +3,6 @@
 
 name: Node.js CI
 
-
 on:
   push:
     branches: [ "main", "deployment" ]
@@ -23,12 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      env:
-        ATLAS_URI: ${{ secrets.ATLAS_URI }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+      env:
+        ATLAS_URI: ${{ secrets.ATLAS_URI }}
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
