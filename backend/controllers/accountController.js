@@ -14,7 +14,7 @@ const getAllAccounts = async (req, res) => {
 // Get a specific account by ID
 const getAccountById = async (req, res) => {
     try {
-        const account = await Account.findById(req.params.id);
+        const account = await Account.findOne({ uuid: req.params.id });
         if (!account) {
             return res.status(404).json({ message: 'Account not found' });
         }
@@ -82,10 +82,55 @@ const setLoginCookie = async (req, res) => {
     res.status(200).json({ message: 'Login successful' });
 };
 
+// Set logout cookie
+const setLogoutCookie = async (req, res) => {
+    res.clearCookie('uuid');
+    res.status(200).json({ message: 'Logout successful' });
+};
+
 // Get cookies
 const getCookies = async (req, res) => {
     // Get all cookies
     res.send(req.cookies);
+};
+
+// Add a friend to the account
+const addFriend = async (req, res) => {
+    try {
+        // given the email in req.body.friend, find the account with that email
+        const friendAccount = await Account.findOne({ username: req.body.friend });
+        console.log(friendAccount.uuid);
+        const friendUUID = friendAccount ? friendAccount.uuid : null;
+
+        const account = await Account.findOne({ uuid: req.params.id });
+        if (!account) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+        account.friends.push(friendUUID);
+        await account.save();
+        res.status(200).json(friendAccount);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Delete a friend from the account
+const removeFriend = async (req, res) => {
+    try {
+        const account = await Account.findOne({ uuid: req.params.id }); // Account we want to remove a friend from
+        if (!account) {
+            return res.status(404).json({ message: 'Account not found' });
+        }
+        const friendIndex = account.friends.indexOf(req.body.friend); // Index of the friend we want to remove
+        if (friendIndex === -1) {
+            return res.status(404).json({ message: 'Friend not found in the account\'s friend list' });
+        }
+        account.friends.splice(friendIndex, 1);
+        await account.save();
+        res.status(200).json({ message: 'Friend removed successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 };
 
 module.exports = {
@@ -95,5 +140,8 @@ module.exports = {
     updateAccountById,
     deleteAccountById,
     setLoginCookie,
-    getCookies
+    getCookies,
+    addFriend,
+    removeFriend,
+    setLogoutCookie
 };
