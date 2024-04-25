@@ -13,7 +13,7 @@ const Preferences = () => {
     const [uuid, setUuid] = React.useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/accounts/cookies', {
+        fetch('/api/accounts/cookies', {
             method: 'GET',
             credentials: 'include', // Include credentials
         })
@@ -36,7 +36,7 @@ const Preferences = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:4000/api/accounts/update-preferences', {
+            const response = await fetch('/api/accounts/update-preferences', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

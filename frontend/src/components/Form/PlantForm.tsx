@@ -52,7 +52,7 @@ const PlantForm: FC<PlantFormProps> = ({ formIsOpen, onClose, onSubmit, plantDat
 
   useEffect(() => {
     fetchPresetPlants();
-    fetch('http://localhost:4000/api/accounts/cookies', {
+    fetch('/api/accounts/cookies', {
       method: 'GET',
       credentials: 'include', // Include credentials
     })

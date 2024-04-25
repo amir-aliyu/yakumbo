@@ -13,7 +13,7 @@ const [uuid, setUuid] = useState<string>(''); // Current user's UUID
 
 useEffect(() => {
     getFriends();
-    fetch('http://localhost:4000/api/accounts/cookies', { // Get the current user's UUID
+    fetch('/api/accounts/cookies', { // Get the current user's UUID
       method: 'GET',
       credentials: 'include', // Include credentials
     })
@@ -25,7 +25,7 @@ useEffect(() => {
 
 const getWateringStreak = async (uuid: string) => {
     // Get the list of all plants
-    const response = await fetch(`http://localhost:4000/api/plants/list/${uuid}`);
+    const response = await fetch(`/api/plants/list/${uuid}`);
     const data = await response.json();
     console.log("Plants data: ", data);
     var streakSum = 0;
@@ -41,12 +41,12 @@ const getFriends = async () => { // Fetch friends data
     // If uuid isn't set, return early
     if (!uuid) return;
     try {
-        const response = await fetch(`http://localhost:4000/api/accounts/${uuid}`);
+        const response = await fetch(`/api/accounts/${uuid}`);
         const data = await response.json();
         console.log("Friends data: ", data.friends)
         const friendUuids = data.friends;
         const friendPromises = friendUuids.map(async (friendUuid: string) => {
-            const friendResponse = await fetch(`http://localhost:4000/api/accounts/${friendUuid}`);
+            const friendResponse = await fetch(`/api/accounts/${friendUuid}`);
             const friendData = await friendResponse.json();
             const streak = await getWateringStreak(friendUuid);
             return {
@@ -69,7 +69,7 @@ const getFriends = async () => { // Fetch friends data
 
 useEffect(() => {
     setFriendsData([]);
-    fetch('http://localhost:4000/api/accounts/cookies', { // Get the current user's UUID
+    fetch('/api/accounts/cookies', { // Get the current user's UUID
       method: 'GET',
       credentials: 'include', // Include credentials
     })
@@ -84,7 +84,7 @@ useEffect(() => {
 // Function to add a friend
 const addFriend = async () => {
     try {
-        const response = await fetch(`http://localhost:4000/api/accounts/${uuid}/friends`, { // Add friend to the user's friends list
+        const response = await fetch(`/api/accounts/${uuid}/friends`, { // Add friend to the user's friends list
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ const addFriend = async () => {
         throw new Error(data.message || 'Failed to add friend');
         } else {
             // Get the friend's list of plants
-            const friendResponse = await fetch(`http://localhost:4000/api/accounts/${data.uuid}`);
+            const friendResponse = await fetch(`/api/accounts/${data.uuid}`);
             const friendData = await friendResponse.json();
             const streak = await getWateringStreak(data.uuid);
             setFriendsData(prevData => [ // Add the new friend to the state
@@ -122,7 +122,7 @@ const addFriend = async () => {
 // Function to remove a friend
 const removeFriend = async (friendUuid: String) => {
     try {
-        const response = await fetch(`http://localhost:4000/api/accounts/${uuid}/friends`, { // Remove friend from the user's friends list
+        const response = await fetch(`/api/accounts/${uuid}/friends`, { // Remove friend from the user's friends list
             method: 'DELETE',
             headers: {
             'Content-Type': 'application/json',
