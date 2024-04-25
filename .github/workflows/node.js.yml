@@ -3,6 +3,9 @@
 
 name: Node.js CI
 
+env:
+  ATLAS_URI: ${{ secrets.ATLAS_URI }}
+
 on:
   push:
     branches: [ "main" ]
