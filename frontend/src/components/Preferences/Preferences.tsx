@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 const Preferences = () => {
     const navigate = useNavigate();
     const [recipeOptIn, setRecipeOptIn] = useState(true);
+    const [recipeOptAll, setRecipeOptAll] = useState(true);
     const [recipeOptInValue, setRecipeOptInValue] = useState(
         recipeOptIn ? 1 : 0
     );
@@ -25,13 +26,20 @@ const Preferences = () => {
     }, [uuid, setUuid]);
 
     const handleChange = (event) => {
-        if (event.target.value === "1") {
+        if (event.target.value === "1") { // recipes if have ingredients 
             setRecipeOptIn(true);
+            setRecipeOptAll(false)
             setRecipeOptInValue(1);
-        } else if (event.target.value === "0") {
+        } else if (event.target.value === "0") { // no recipes
             setRecipeOptIn(false);
+            setRecipeOptAll(false);
             setRecipeOptInValue(0);
-        }
+        } else if (event.target.value === "2") { // ALL recipes
+          setRecipeOptIn(true);
+          setRecipeOptAll(true);
+          setRecipeOptInValue(2);
+      }
+
     };
 
     const handleSubmit = async (event) => {
@@ -45,6 +53,7 @@ const Preferences = () => {
                 body: JSON.stringify({
                     uuid: uuid,
                     recipeOptIn: recipeOptIn,
+                    recipeOptAll: recipeOptAll,
                 }),
             });
             if (response.ok) {
@@ -86,8 +95,9 @@ const Preferences = () => {
                   <option value="" disabled>
                     Select an option
                   </option>
-                  <option value={1}>Yes, I want to receive recipe emails</option>
-                  <option value={0}>No, I do not want to receive recipe emails</option>
+                  <option value={2}>Yes, I want to receive ALL recipe emails</option>
+                  <option value={1}>Yes, I do not want to receive recipe emails, but only if I have the required plants</option>
+                  <option value={0}>No, I do not want to receive recipe emails </option>
                 </Select>
                 <Box sx={{ width: "100%" }} />
                 <button type="submit" className="btn btn-primary mt-4">

@@ -165,17 +165,23 @@ async function sendRecipeOfTheDay() {
         for (const account of accounts) {
             console.log(`Checking account: ${account.username}`);
 
-             // Check if the account has opted in for the recipe emails
-             if (!account.recipeOptIn) {
+            // Check if the account has opted in for the recipe emails
+            if (!account.recipeOptIn) {
                 console.log(`User ${account.name} has not opted in for recipes.`);
                 continue;  // Skip this account as they have not opted in for recipes
             }
-
-            const userPlants = await Plant.find({ owner: account._id });
-            if (userHasRequiredIngredients(userPlants, recipeOfTheDay.ingredients)) {
-                //Send email if they have the necessary ingredients
-                await sendRecipeToUser(account.username, recipeOfTheDay);
+            
+            // Check if account only wants the recipe if they have the ingredients
+            if (!account.recipeOptAll) {
+                const userPlants = await Plant.find({ owner: account._id });
+                if (!userHasRequiredIngredients(userPlants, recipeOfTheDay.ingredients)) {
+                    console.log(`User ${account.name} does not have necessary ingredients.`);
+                    continue;  // Skip this account as they do not have the necessary ingredients
+                }
             }
+
+            // send email to user
+            await sendRecipeToUser(account.username, recipeOfTheDay);          
         }
     } catch (error) {
         console.error('Failed to send recipe of the day:', error);

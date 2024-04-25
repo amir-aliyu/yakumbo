@@ -18,6 +18,11 @@ const accountSchema = new Schema({
         type: Boolean,
         default: true,
         required: true,
+    },
+    recipeOptAll: {
+        type: Boolean,
+        default: false,
+        required: true,
     }
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
