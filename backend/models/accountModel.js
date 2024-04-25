@@ -13,7 +13,10 @@ const accountSchema = new Schema({
     uuid: {
         type: String,
         required: true,
-    }
+    },
+    friends: [{
+        type: String,
+    }]
 
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
