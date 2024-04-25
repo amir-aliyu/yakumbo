@@ -11,6 +11,27 @@ const Preferences = () => {
         recipeOptIn ? 1 : 0
     );
     const [uuid, setUuid] = React.useState(null);
+    const [profilePic, setProfilePic] = useState("");
+
+    const imageToBase64 = async (image: File) => {
+      // Return a promise that resolves with the base64 string
+      return new Promise<string>((resolve, reject) => {
+        // Create a new FileReader
+        const reader = new FileReader();
+        // Set the onload event handler
+        reader.onload = () => {
+          // Resolve the promise with the result
+          resolve((reader.result as string).substring(22)); // Remove the data URL prefix (data:image/png;base64,)
+        };
+        // Set the onerror event handler
+        reader.onerror = () => {
+          // Reject the promise with an error
+          reject(new Error('Failed to read image file'));
+        };
+        // Read the image file as a data URL
+        reader.readAsDataURL(image);
+      });
+    };
 
     useEffect(() => {
         fetch('http://localhost:4000/api/accounts/cookies', {
@@ -18,7 +39,7 @@ const Preferences = () => {
             credentials: 'include', // Include credentials
         })
         .then(response => response.json())
-        .then(data => {setUuid(data.uuid);})
+        .then(data => {setUuid(data.uuid); setProfilePic(data.profilePicture);})
         .catch(error => console.error('Error:', error));
         console.log(uuid);
     }, [uuid, setUuid]);
@@ -31,6 +52,20 @@ const Preferences = () => {
             setRecipeOptIn(false);
             setRecipeOptInValue(0);
         }
+    };
+
+    const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      // Get the selected file
+      const file = event.target.files?.[0];
+      if (file) {
+        try {
+          // Convert the file to base64
+          const base64 = await imageToBase64(file);
+          console.log(base64);
+        } catch (error: any) {
+          console.error('Error converting image:', error);
+        }
+      }
     };
 
     const handleSubmit = async (event) => {
@@ -93,6 +128,17 @@ const Preferences = () => {
               <button type="reset" className="btn btn-danger mt-4 ms-2">
                 Cancel
               </button>
+            </Box>
+            <Box component="form" onSubmit={handleSubmit}>
+                <TextField
+                    fullWidth
+                    type="file"
+                    onChange={handleFileSelection}
+                />
+                {profilePic && (
+                    <img src={profilePic} alt="Profile" style={{ width: 100, height: 100 }} />
+                )}
+                <Button type="submit">Save Preferences</Button>
             </Box>
           </div>
         </div>

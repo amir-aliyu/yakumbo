@@ -9,12 +9,32 @@ interface HomeProps {}
 const Home: FC<HomeProps> = () => {
   const [plants, setPlants] = useState<any[]>([]); // Adjusted for TypeScript
   const [uuid, setUuid] = useState<string>(''); // Added for TypeScript
+  const [profilePic, setProfilePic] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlant, setEditingPlant] = useState<{ _id: string; name: string; type: string; wateringTime: string, image: string } | null>(null);
 
   const displayNotification = (message: string, type: "success" | "error" | "info") => {
     toast[type](message, {position: 'bottom-right'});
   };
+
+  const fetchUserDetails = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/accounts/cookies', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setUuid(data.uuid);
+        setProfilePic(data.profilePicture); // Update state with the fetched profile picture
+      } else {
+        throw new Error(data.message || 'Error fetching user details');
+      }
+    } catch (error: any) {
+      console.error('Error:', error);
+      displayNotification('Failed to fetch user details', 'error');
+    }
+  }, []);
 
   const fetchPlants = useCallback(async () => {
     console.log('fetching plants')
@@ -59,6 +79,10 @@ const Home: FC<HomeProps> = () => {
     .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);
+  
+  useEffect(() => {
+    fetchUserDetails();
+  }, [fetchUserDetails]);
 
   // Function to convert an image to base64 encoding
   // (This could be moved to the server side so we can use jimp to resize the image before converting it to base64)
@@ -225,6 +249,11 @@ const handleEditPlantClick = async (plantId: string) => {
   return (
     <div className="container">
       <h1 className="mt-4 mb-4 fw-bold">My Plants</h1>
+      <div className="profile-section">
+        {profilePic && (
+          <img src={`data:image/png;base64,${profilePic}`} alt="Profile" style={{ width: 100, height: 100 }} />
+        )}
+      </div>
     {/* Plant List */}
     <div className="card mt-4 shadow">
       <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
