@@ -17,10 +17,12 @@ const LoginPage: React.FC = () => {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (loginPage) {
-            testLogin();
+            await login();
+            navigate('/dashboard');
+            window.location.reload();
         }
         else {
             testRegister();

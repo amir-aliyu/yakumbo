@@ -53,7 +53,6 @@ const Home: FC<HomeProps> = () => {
 
   useEffect(() => {
     getFriendName();
-    console.log(isReadOnly);
     fetch('http://localhost:4000/api/accounts/cookies', {
       method: 'GET',
       credentials: 'include', // Include credentials
@@ -61,8 +60,7 @@ const Home: FC<HomeProps> = () => {
     .then(response => response.json())
     .then(data => {setUuid(data.uuid);})
     .catch(error => console.error('Error:', error));
-    console.log(uuid);
-  }, [uuid, isReadOnly]);
+  }, [uuid]);
 
   useEffect(() => {
     // Credentials are included by default in fetch requests to the same origin
@@ -71,7 +69,7 @@ const Home: FC<HomeProps> = () => {
       credentials: 'include', // Include credentials
     })
     .then(response => response.json())
-    .then(data => {setUuid(data.uuid);})
+    .then(data => {setUuid(data.uuid);console.log(data.uuid);})
     .catch(error => console.error('Error:', error));
     fetchPlants();
   }, [fetchPlants]);

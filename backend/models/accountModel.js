@@ -14,10 +14,14 @@ const accountSchema = new Schema({
         type: String,
         required: true,
     },
+    recipeOptIn: {
+        type: Boolean,
+        default: true,
+        required: true,
+    }
     friends: [{
         type: String,
     }]
-
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
 
