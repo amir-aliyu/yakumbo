@@ -5,6 +5,7 @@ name: Node.js CI
 
 env:
   ATLAS_URI: ${{ secrets.ATLAS_URI }}
+  PORT: 4000
 
 on:
   push:
