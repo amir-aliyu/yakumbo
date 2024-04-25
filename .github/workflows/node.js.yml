@@ -3,9 +3,6 @@
 
 name: Node.js CI
 
-env:
-  ATLAS_URI: ${{ secrets.ATLAS_URI }}
-
 on:
   push:
     branches: [ "main" ]
@@ -25,6 +22,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
+      env:
+        ATLAS_URI: ${{ secrets.ATLAS_URI }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
