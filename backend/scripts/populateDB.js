@@ -31,9 +31,13 @@ const recipes = [
         recipeHtml: "./utilities/carrotCake.html"
     }, {
         name: "Jollof",
-        ingredients: ["Tomato Plant","Onion"],
+        ingredients: ["Tomato Plant","Onion","Basil"],
         recipeHtml: "./utilities/jollof.html"
-    },
+    },{
+        name: "Pizza",
+        ingredients: ["Tomato Plant","Basil"],
+        recipeHtml: "./utilities/pizza.html"
+    }
 
 ];
 
