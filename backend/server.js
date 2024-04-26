@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const WebSocket = require('ws');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const cron = require('node-cron');
 
 require('dotenv').config();
 
 const plantRoutes = require('./routes/plants');
 const accountRoutes = require('./routes/accounts');
-const { schedulePlantWateringJobs } = require('./utilities/cronScheduler');
+const recipeRoutes = require('./routes/recipe');
+const { schedulePlantWateringJobs, sendRecipeOfTheDay } = require('./utilities/cronScheduler');
 
 const PORT = process.env.PORT || 4000;
 const WS_PORT = process.env.WS_PORT || 8080; // WebSocket port
@@ -33,6 +35,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/plants', plantRoutes)
 app.use('/api/accounts', accountRoutes)
+app.use('/api/recipe', recipeRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)
@@ -52,9 +55,27 @@ mongoose.connect(process.env.ATLAS_URI)
             });
             ws.on('close', () => console.log('Client disconnected'));
         });
+        
+        // Refresh and schedule cron jobs for plant watering at 8:55AM
+        //      note. all plant notifications will be scheduled for 9:00AM
+        cron.schedule('55 8 * * *', () => {
+            console.log("Refreshing plant watering schedules...");
+            schedulePlantWateringJobs(wss)
+                .then(() => console.log("Plant watering schedules refreshed."))
+                .catch(console.error);
+        });
 
-        // Schedule cron jobs for plant watering
+        // send recipe of the day at 9:05AM
+        cron.schedule('05 9 * * *', () => {
+            console.log("Sending Recipe Of The Day...");
+            sendRecipeOfTheDay()
+                .then(() => console.log("Recipe OTD Complete."))
+                .catch(console.error);
+        });
+
+        // initial scheduling of cron jobs for plant watering
         schedulePlantWateringJobs(wss).catch(console.error);
+
     })
     .catch((error) => {
         console.error('MongoDB connection error:', error);

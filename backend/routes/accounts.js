@@ -7,7 +7,9 @@ const {
     addAccount,
     deleteAccountById,
     updateAccountById,
+    updateAccountByUUID,
     setLoginCookie,
+    setLogoutCookie,
     getCookies
 } = require('../controllers/accountController');
 
@@ -20,6 +22,8 @@ router.get('/:id', getAccountById);
 router.post('/', addAccount);
 router.post('/login', setLoginCookie);
 router.post('/register', addAccount);
+router.post('/logout', setLogoutCookie);
+router.post('/update-preferences', updateAccountByUUID);
 
 
 // PATCH Requests

@@ -19,11 +19,12 @@ const LoginPage: React.FC = () => {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (loginPage) {
-            login();
+            await login();
             navigate('/dashboard');
+            window.location.reload();
         }
         else {
             register();
@@ -82,24 +83,31 @@ const LoginPage: React.FC = () => {
     }, [name, email, password]);
 
     return (
-        <div>
-            <h1>{loginPage ? "Login Page" : "Register Page"}</h1>
-            <form onSubmit={handleSubmit}>
-                {!loginPage && <div>
-                    <label>Name:</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                </div>}
-                <div>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={handleEmailChange} />
+        <div className="container">
+            <h1 className="mt-4 mb-4 fw-bold">{loginPage ? "Login Page" : "Register Page"}</h1>
+            <div className="card mt-4 shadow">
+                <div className="card-header fw-bold d-flex align-items-center bg-primary text-white">
+                    <p className="m-0 fs-3">{loginPage ? "Login Page" : "Register Page"}</p>
                 </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={handlePasswordChange} />
+                <div className="card-body" style={{ backgroundColor: 'rgba(110, 187, 164, 0.4)' }}>
+                    <form onSubmit={handleSubmit}>
+                        {!loginPage && <div>
+                            <label>Name:</label>
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        </div>}
+                        <div>
+                            <label>Email:</label>
+                            <input type="email" value={email} onChange={handleEmailChange} />
+                        </div>
+                        <div>
+                            <label>Password:</label>
+                            <input type="password" value={password} onChange={handlePasswordChange} />
+                        </div>
+                        <button type="submit">{loginPage ? "Login" : "Register"}</button>
+                    </form>
+                    <button onClick={toggleLoginPage}>{loginPage ? "Click to Register Instead!" : "Click to Login Instead!"}</button>
                 </div>
-                <button type="submit">{loginPage ? "Login" : "Register"}</button>
-            </form>
-            <button onClick={toggleLoginPage}>{loginPage ? "Click to Register Instead!" : "Click to Login Instead!"}</button>
+            </div>
         </div>
     );
 };
