@@ -1,7 +1,8 @@
 # Plant Watering App
 ## CSDS393
 This is the demo of our web app!
-[View the live demo here!](https://goldfish-app-ah94n.ondigitalocean.app/){:target="_blank"}
+[View the live demo here!](https://goldfish-app-ah94n.ondigitalocean.app/)
+
 *Please note: Due to browser cookie settings, do not use Chrome to access the application.*
 
 ## Setup Guide
