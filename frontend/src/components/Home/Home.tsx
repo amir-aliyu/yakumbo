@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import PlantForm from '../Form/PlantForm.tsx';
 //import test from 'node:test';
 
+const BACKEND_URL = "goldfish-app-ah94n.ondigitalocean.app";
+
 interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
@@ -53,20 +55,18 @@ const Home: FC<HomeProps> = () => {
 
   useEffect(() => {
     getFriendName();
-    console.log(isReadOnly);
-    fetch('http://localhost:4000/api/accounts/cookies', {
+    fetch(`/api/accounts/cookies`, {
       method: 'GET',
       credentials: 'include', // Include credentials
     })
     .then(response => response.json())
     .then(data => {setUuid(data.uuid);})
     .catch(error => console.error('Error:', error));
-    console.log(uuid);
-  }, [uuid, isReadOnly]);
+  }, [uuid]);
 
   useEffect(() => {
     // Credentials are included by default in fetch requests to the same origin
-    fetch('http://localhost:4000/api/accounts/cookies', {
+    fetch(`/api/accounts/cookies`, {
       method: 'GET',
       credentials: 'include', // Include credentials
     })

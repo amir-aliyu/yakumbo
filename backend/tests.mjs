@@ -43,6 +43,13 @@ test('Test if server can set cookies', async () => {
         body: JSON.stringify({ username: "test@example.com", password: "1234" }),
       });
     const text = await response.text();
+});
+
+// TESTING API ENDPOINTS
+// PLANTS:
+// Try to get /api/plants/presets
+test('GET /api/plants/presets', async () => {
+    const response = await fetch('http://localhost:4000/plants/presets');
     assert.strictEqual(response.status, 200);
     assert.strictEqual(text.includes('Login successful'), true);
 });
@@ -96,7 +103,7 @@ var testPlantId;
 
 // Try to post to /api/plants/
 test('POST /api/plants/', async () => {
-    const response = await fetch('http://localhost:4000/api/plants/', {
+    const response = await fetch('/api/plants/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -115,7 +122,7 @@ test('POST /api/plants/', async () => {
 });
 // Try to edit this plant
 test('PATCH /api/plants/', async () => {
-    const response = await fetch(`http://localhost:4000/api/plants/${testPlantId}`, {
+    const response = await fetch(`/api/plants/${testPlantId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -131,7 +138,7 @@ test('PATCH /api/plants/', async () => {
 });
 // Get plant from id
 test('GET /api/plants/', async () => {
-    const response = await fetch(`http://localhost:4000/api/plants/${testPlantId}`);
+    const response = await fetch(`/api/plants/${testPlantId}`);
     const plant = await response.json();
     assert.strictEqual(response.status, 200);
     assert.strictEqual(plant.name, 'Test Plant 2');
@@ -140,7 +147,7 @@ test('GET /api/plants/', async () => {
 });
 // Remove this plant after the test
 test('DELETE /api/plants/', async () => {
-    const response = await fetch(`http://localhost:4000/api/plants/${testPlantId}`, {
+    const response = await fetch(`/api/plants/${testPlantId}`, {
         method: 'DELETE'
     });
     assert.strictEqual(response.status, 200);
@@ -154,7 +161,7 @@ var testAccountId;
 
 // Try to post to /api/accounts/
 test('POST /api/accounts/', async () => {
-    const response = await fetch('http://localhost:4000/api/accounts/', {
+    const response = await fetch('/api/accounts/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -182,7 +189,7 @@ test('GET /api/accounts/', async () => {
 });
 // Try to edit this account
 test('PATCH /api/accounts/', async () => {
-    const response = await fetch(`http://localhost:4000/api/accounts/${testAccountId}`, {
+    const response = await fetch(`/api/accounts/${testAccountId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -197,7 +204,7 @@ test('PATCH /api/accounts/', async () => {
 });
 // Try to remove this account
 test('DELETE /api/accounts/', async () => {
-    const response = await fetch(`http://localhost:4000/api/accounts/${testAccountId}`, {
+    const response = await fetch(`/api/accounts/${testAccountId}`, {
         method: 'DELETE'
     });
     assert.strictEqual(response.status, 200);

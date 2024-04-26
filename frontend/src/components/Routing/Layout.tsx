@@ -8,7 +8,7 @@ const Layout = () => {
     const [uuid, setUuid] = React.useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/accounts/cookies', {
+        fetch('/api/accounts/cookies', {
             method: 'GET',
             credentials: 'include', // Include credentials
         })
@@ -19,7 +19,7 @@ const Layout = () => {
     }, [uuid, setUuid]);
 
     const handleLogOut = async () => {
-        await fetch('http://localhost:4000/api/accounts/logout', {
+        await fetch('/api/accounts/logout', {
             method: 'POST',
             credentials: 'include', // Include credentials
         })
