@@ -33,9 +33,9 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/plants', plantRoutes)
-app.use('/api/accounts', accountRoutes)
-app.use('/api/recipe', recipeRoutes)
+app.use('/plants', plantRoutes)
+app.use('/accounts', accountRoutes)
+app.use('/recipe', recipeRoutes)
 
 // Connect to the database
 mongoose.connect(process.env.ATLAS_URI)
