@@ -27,7 +27,7 @@ const recipes = [
         recipeHtml: "./utilities/tomatoSoup.html"
     }, {
         name: "Carrot Cake Recipe",
-        ingredients: ["Carrot Plant",],
+        ingredients: ["Carrots",],
         recipeHtml: "./utilities/carrotCake.html"
     }
 ];
