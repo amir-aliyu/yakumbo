@@ -206,3 +206,7 @@ test('DELETE /api/accounts/', async () => {
 test('Disconnect from the database', async () => {
     await mongoose.disconnect();
 });
+// Stop running tests.mjs
+test('Stop running tests.mjs', async () => {
+    process.exit();
+});
