@@ -43,6 +43,7 @@ test('Test if server can set cookies', async () => {
         body: JSON.stringify({ username: "test@example.com", password: "1234" }),
       });
     const text = await response.text();
+    assert.strictEqual(text.includes('Login successful'), true);
 });
 
 // TESTING API ENDPOINTS
@@ -51,7 +52,6 @@ test('Test if server can set cookies', async () => {
 test('GET /api/plants/presets', async () => {
     const response = await fetch('http://localhost:4000/api/plants/presets');
     assert.strictEqual(response.status, 200);
-    assert.strictEqual(text.includes('Login successful'), true);
 });
 // Test if cookie retrieval is working
 test('Test if cookie retrieval is working', async () => {
