@@ -19,6 +19,11 @@ const accountSchema = new Schema({
         default: true,
         required: true,
     },
+    recipeOptAll: {
+        type: Boolean,
+        default: false,
+        required: true,
+    },
     friends: [{
         type: String,
     }]

@@ -9,10 +9,10 @@ const {
     updateAccountById,
     updateAccountByUUID,
     setLoginCookie,
+    setLogoutCookie,
     getCookies,
     addFriend,
     removeFriend,
-    setLogoutCookie
 } = require('../controllers/accountController');
 
 // GET Requests
