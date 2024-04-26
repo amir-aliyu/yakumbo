@@ -7,8 +7,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log("THIS IS HERE" + process.env.ATLAS_URI);
-
 // Boolean for whether we are connected to the database
 let connected = false;
 test('Test if we are connected to the database', async () => {
