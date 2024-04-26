@@ -25,8 +25,11 @@ const recipes = [
         name: "Super Tasty Tomato Soup!",
         ingredients: ["Tomato Plant",],
         recipeHtml: "./utilities/tomatoSoup.html"
-    },
-
+    }, {
+        name: "Carrot Cake Recipe",
+        ingredients: ["Carrot Plant",],
+        recipeHtml: "./utilities/carrotCake.html"
+    }
 ];
 
 const insertData = async () => {
