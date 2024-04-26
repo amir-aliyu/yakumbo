@@ -37,6 +37,10 @@ const recipes = [
         name: "Pizza",
         ingredients: ["Tomato Plant","Basil"],
         recipeHtml: "./utilities/pizza.html"
+    },{
+        name: "Lavender Tea",
+        ingredients: ["Lavender"],
+        recipeHtml: "./utilities/lavender.html"
     }
 
 ];
