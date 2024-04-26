@@ -74,6 +74,7 @@ const History = () => {
                         <li className="list-group-item bg-light">
                             <div className="row">
                                 <div className="col fw-bold fs-5">Recipe</div>
+                                <div className="col fw-bold fs-5">Ingredients</div>
                                 <div className="col fw-bold fs-5 text-end">Plants Owned</div>
                             </div>
                         </li>
@@ -81,16 +82,18 @@ const History = () => {
                             <li key={recipe._id} className="list-group-item">
                                 <div className="row">
                                     <div className="col">
-                                        <button className="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={"#" + recipes.indexOf(recipe.name) + "recipe"}>
+                                        <button className="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${recipe._id}`}>
                                             {recipe.name}
                                         </button>
+                                    </div>
+                                    <div className="col">
+                                        {recipe.ingredients.join(', ')}  {/* Assuming ingredients are an array of strings */}
                                     </div>
                                     <div className="col text-end">
                                         {hasAllPlants(recipe.ingredients) ? "Yes" : "No"}
                                     </div>
-                                    <div className="collapse" id={recipes.indexOf(recipe.name) + "recipe"}>
+                                    <div className="collapse" id={`collapse${recipe._id}`}>
                                         <div className="card card-body">
-                                            {/* Dangerous HTML insertion; use with caution and sanitize inputs */}
                                             <div dangerouslySetInnerHTML={{ __html: recipe.recipeHtml }} />
                                         </div>
                                     </div>
@@ -102,6 +105,7 @@ const History = () => {
             </div>
         </div>
     );
+    
 };
 
 export default History;
