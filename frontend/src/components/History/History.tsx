@@ -32,7 +32,7 @@ const History = () => {
       }, [uuid]);
     
     useEffect(() => {
-        fetch('http://localhost:4000/api/accounts/cookies', {
+        fetch('/api/accounts/cookies', {
             method: 'GET',
             credentials: 'include', // Include credentials
         })
@@ -43,7 +43,7 @@ const History = () => {
     }, [uuid, setUuid]);
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/recipe/', {
+        fetch('/api/recipe/', {
             method: 'GET',
             credentials: 'include', // Include credentials
         })
