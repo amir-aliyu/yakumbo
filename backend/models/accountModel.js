@@ -23,7 +23,11 @@ const accountSchema = new Schema({
         type: Boolean,
         default: false,
         required: true,
-    }
+    },
+    friends: [{
+        type: String,
+    }]
+
 }, { timestamps: true }); // Adding timestamps to track creation and modification times
 
 
