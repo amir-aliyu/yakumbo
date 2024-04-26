@@ -49,7 +49,7 @@ test('Test if server can set cookies', async () => {
 // PLANTS:
 // Try to get /api/plants/presets
 test('GET /api/plants/presets', async () => {
-    const response = await fetch('http://localhost:4000/plants/presets');
+    const response = await fetch('http://localhost:4000/api/plants/presets');
     assert.strictEqual(response.status, 200);
     assert.strictEqual(text.includes('Login successful'), true);
 });
