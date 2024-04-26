@@ -23,9 +23,25 @@ mongoose.connect(process.env.ATLAS_URI)
 const recipes = [
     {
         name: "Super Tasty Tomato Soup!",
-        ingredients: ["Tomato Plant",],
+        ingredients: ["Tomato Plant","Basil"],
         recipeHtml: "./utilities/tomatoSoup.html"
-    },
+    }, {
+        name: "Carrot Cake Recipe",
+        ingredients: ["Carrots",],
+        recipeHtml: "./utilities/carrotCake.html"
+    }, {
+        name: "Jollof",
+        ingredients: ["Tomato Plant","Onion","Basil"],
+        recipeHtml: "./utilities/jollof.html"
+    },{
+        name: "Pizza",
+        ingredients: ["Tomato Plant","Basil"],
+        recipeHtml: "./utilities/pizza.html"
+    },{
+        name: "Lavender Tea",
+        ingredients: ["Lavender"],
+        recipeHtml: "./utilities/lavender.html"
+    }
 
 ];
 
