@@ -23,7 +23,7 @@ mongoose.connect(process.env.ATLAS_URI)
 const recipes = [
     {
         name: "Super Tasty Tomato Soup!",
-        ingredients: ["Tomato Plant",],
+        ingredients: ["Tomato Plant","Basil"],
         recipeHtml: "./utilities/tomatoSoup.html"
     }, {
         name: "Carrot Cake Recipe",
