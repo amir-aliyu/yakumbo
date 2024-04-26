@@ -20,7 +20,7 @@ test('Test if we are connected to the database', async () => {
 // PLANTS:
 // Try to get /api/plants/presets
 test('GET /api/plants/presets', async () => {
-    const response = await fetch('/api/plants/presets');
+    const response = await fetch('http://localhost:4000/plants/presets');
     assert.strictEqual(response.status, 200);
 });
 
