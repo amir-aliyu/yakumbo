@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from './components/Routing/Layout.tsx';
-import About from './components/About/About.tsx';
+import Donate from './components/Donate/Donate.tsx';
 import Contact from './components/Contact/Contact.tsx';
 import { toast } from 'react-toastify';
 import React, { useEffect, } from 'react';
@@ -50,9 +50,10 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
-					{/* <Route path="/about" element={<About/>} />
+					{/* <Route path="/about" element={<About/>} /> */}
+					<Route path="/donate" element={<Donate/>} />
 					<Route path="/contact" element={<Contact/>} />
-					<Route path="/inspiration" element={<Inspiration/>} /> */}
+					<Route path="/inspiration" element={<Inspiration/>} />
 					<Route path="*" element={<Home />} />
 				</Route>
 			</Routes>
