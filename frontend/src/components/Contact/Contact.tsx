@@ -28,8 +28,8 @@ const Contact= () => {
           <div className="row section-content">
               <div className="col-md-6">
                   <h5>Contact Information</h5>
-                  <p>Email: info@yfoundation.org</p>
-                  <p>Phone: (123) 456-7890</p>
+                  <p>Email: bwaliyu@yahoo.com </p>
+                  <p>Phone: (615) 243-6441</p>
               </div>
               <div className="col-md-6">
                   <h5>Get Involved</h5>

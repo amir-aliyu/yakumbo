@@ -1,11 +1,11 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Home.css';
-import PlantForm from '../Form/PlantForm.tsx';
+// import PlantForm from '../Form/PlantForm.tsx';
 //import test from 'node:test';
 
-const BACKEND_URL = "goldfish-app-ah94n.ondigitalocean.app";
+// const BACKEND_URL = "goldfish-app-ah94n.ondigitalocean.app";
 
 const Home = () => {
 
@@ -52,12 +52,9 @@ const Home = () => {
                 <p>Description of Project 3...</p>
             </div>
         </div>
+
+
     </div>
-
-    
-
-
-
 </div>
        
   );
