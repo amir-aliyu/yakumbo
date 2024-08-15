@@ -18,18 +18,6 @@ const Layout = () => {
         console.log(uuid);
     }, [uuid, setUuid]);
 
-    const handleLogOut = async () => {
-        await fetch('/api/accounts/logout', {
-            method: 'POST',
-            credentials: 'include', // Include credentials
-        })
-        .then(response => response.json())
-        .then(data => {setUuid(null);})
-        .catch(error => console.error('Error:', error));
-        // refresh the page after logging out
-        window.location.reload();
-    }
-
   return (
     <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,17 +28,17 @@ const Layout = () => {
                 </form>
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
-                        <Link to="/dashboard">Dashboard</Link>
+                        <Link to="/home">Home</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/friends">Friends</Link>
+                        <Link to="/about">About</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/preferences">My Preferences</Link>
+                        <Link to="/contact">Contact Us</Link>
                     </li>
-                    {uuid ? <button className="btn btn-success my-2 my-sm-0" onClick={handleLogOut}>Logout</button> : <li className="nav-item">
-                        <Link to="/login">Login</Link>
-                    </li>}
+                    <li className="nav-item">
+                        <Link to="/inspiration">Our Inspiration</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

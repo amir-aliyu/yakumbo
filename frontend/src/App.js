@@ -4,12 +4,11 @@ import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from './components/Routing/Layout.tsx';
-import Friends from './components/Friends/Friends.tsx';
-import Preferences from './components/Preferences/Preferences.tsx';
-import History from './components/History/History.tsx';
+import About from './components/About/About.tsx';
+import Contact from './components/Contact/Contact.tsx';
 import { toast } from 'react-toastify';
 import React, { useEffect, } from 'react';
-import LoginPage from './components/LoginPage/LoginPage.tsx';
+import Inspiration from './components/Inspiration/Inspiration.tsx';
 
 function App() {
 
@@ -51,10 +50,9 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
-					<Route path="/friends" element={<Friends />} />
-					<Route path="/history" element={<History />} />
-					<Route path="/preferences" element={<Preferences />} />
-					<Route path="/login" element={<LoginPage />} />
+					<Route path="/about" element={<About/>} />
+					<Route path="/contact" element={<Contact/>} />
+					<Route path="/inspiration" element={<Inspiration/>} />
 					<Route path="*" element={<Home />} />
 				</Route>
 			</Routes>
