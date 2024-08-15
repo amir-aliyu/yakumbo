@@ -26,7 +26,7 @@ const Layout = () => {
                     <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
-                <ul className="navbar-nav mr-auto">
+                {/* <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
                         <Link to="/home">Home</Link>
                     </li>
@@ -39,7 +39,7 @@ const Layout = () => {
                     <li className="nav-item">
                         <Link to="/inspiration">Our Inspiration</Link>
                     </li>
-                </ul>
+                </ul> */}
             </div>
         </nav>
         <Outlet />
