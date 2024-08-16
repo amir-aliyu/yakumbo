@@ -5,11 +5,6 @@
   "engines": {
     "node": "20.x"
   },
-  "dependencies": {
-    "concurrently": "^8.2.2",
-    "http-proxy-middleware": "^3.0.0",
-    "react-router-dom": "^6.26.1"
-  },
   "main": "App.js",
   "scripts": {
     "heroku-prebuild": "cd frontend && npm install && npm run build",
@@ -17,5 +12,57 @@
     "install": "npm run install:frontend",
     "start:frontend": "cd frontend && npm install && npm start",
     "install:frontend": "cd frontend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "http-proxy-middleware": "^3.0.0",
+    "react-router-dom": "^6.26.1",
+    "@emotion/css": "^11.11.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/material": "^5.15.14",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.8",
+    "bootstrap": "^5.3.3",
+    "classnames": "^2.5.1",
+    "downshift": "^9.0.0",
+    "emotion": "^11.0.0",
+    "jquery": "^3.7.1",
+    "match-sorter": "^6.3.4",
+    "mongodb": "^6.5.0",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-emotion": "^10.0.0",
+    "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.5",
+    "web-vitals": "^2.1.4",
+    "ws": "^8.17.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.29",
+    "react-router-dom": "^6.22.3"
   }
 }
