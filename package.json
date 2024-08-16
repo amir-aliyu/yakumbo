@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "concurrently": "^8.2.2",
-    "http-proxy-middleware": "^3.0.0"
+    "http-proxy-middleware": "^3.0.0",
+    "react-router-dom": "^6.26.1"
   },
   "scripts": {
     "start": "npm run start:frontend",
