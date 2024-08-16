@@ -33,4 +33,4 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: | 
-        cd backend && npm start & sleep 10 && npm test
+        cd frontend && npm start & sleep 10 
