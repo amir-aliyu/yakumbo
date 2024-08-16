@@ -1,3 +1,4 @@
+import React from 'react';
 import Home from './components/Home/Home.tsx';
 import './App.css';
 import { ToastContainer } from 'react-toastify';

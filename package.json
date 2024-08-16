@@ -1,4 +1,10 @@
 {
+  "name": "yakumbo-foundation",
+  "description": "a really cool app",
+  "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "concurrently": "^8.2.2",
     "http-proxy-middleware": "^3.0.0",
