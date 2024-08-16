@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, } from 'react';
 import Home from './components/Home/Home.tsx';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -8,7 +8,6 @@ import Layout from './components/Routing/Layout.tsx';
 import Donate from './components/Donate/Donate.tsx';
 import Contact from './components/Contact/Contact.tsx';
 import { toast } from 'react-toastify';
-import React, { useEffect, } from 'react';
 import Inspiration from './components/Inspiration/Inspiration.tsx';
 
 function App() {
