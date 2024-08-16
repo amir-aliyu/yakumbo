@@ -3,10 +3,6 @@
 
 name: Node.js CI
 
-env:
-  ATLAS_URI: "mongodb+srv://jsy47:iadNLwUbivA9SG9e@csds393.aeggswl.mongodb.net/?retryWrites=true&w=majority&appName=csds393"
-  PORT: 4000
-
 on:
   push:
     branches: [ "main" ]
