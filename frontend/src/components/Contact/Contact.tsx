@@ -1,9 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { Box, Select, TextField, Button } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import React from "react";
 
 const Contact= () => {
 
@@ -16,6 +11,7 @@ const Contact= () => {
             </div>
             <div className="row section-content">
                 <div className="col-md-12">
+                    <center><h4>Venmo: @YakumboFoundation</h4></center>
                     <p>   Your generous donation helps us continue our mission to support the community and make a positive impact. Thank you for your support!</p>
                 </div>
             </div>
@@ -28,12 +24,11 @@ const Contact= () => {
           <div className="row section-content">
               <div className="col-md-6">
                   <h5>Contact Information</h5>
-                  <p>Email: bwaliyu@yahoo.com </p>
-                  <p>Phone: (615) 243-6441</p>
+                  <p>Email us at yakumbofoundation@gmail.com.</p>
               </div>
               <div className="col-md-6">
                   <h5>Get Involved</h5>
-                  <p>If you are interested in volunteering or supporting our cause, please reach out to us...</p>
+                  <p>If you are interested in volunteering or supporting our cause, please reach out.</p>
               </div>
           </div>
       </div>

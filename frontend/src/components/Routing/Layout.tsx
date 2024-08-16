@@ -1,22 +1,8 @@
 import React from "react";
-import { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Button } from "@mui/material";
 import "./Layout.css"
 
 const Layout = () => {
-    const [uuid, setUuid] = React.useState(null);
-
-    useEffect(() => {
-        fetch('/api/accounts/cookies', {
-            method: 'GET',
-            credentials: 'include', // Include credentials
-        })
-        .then(response => response.json())
-        .then(data => {setUuid(data.uuid);})
-        .catch(error => console.error('Error:', error));
-        console.log(uuid);
-    }, [uuid, setUuid]);
 
   return (
     <div>
