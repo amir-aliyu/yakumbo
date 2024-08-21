@@ -9,6 +9,7 @@
   "main": "App.js",
   "scripts": {
     "predeploy":"npm run build",
+    "build": "react-scripts build",
     "deploy":"gh-pages -d dist",
     "heroku-prebuild": "cd frontend && npm install && npm run build",
     "start": "npm run start:frontend",
