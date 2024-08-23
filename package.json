@@ -13,7 +13,7 @@
         "test": "react-scripts test",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build",
-        "heroku-prebuild": "npm install && npm run build"
+        "heroku-prebuild": "npm install && npm install react-router-dom --save && npm run build"
     },
     "dependencies": {
         "@emotion/css": "^11.11.2",
