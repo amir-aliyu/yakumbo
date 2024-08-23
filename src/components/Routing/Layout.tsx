@@ -25,6 +25,9 @@ const Layout = () => {
                     <li className="nav-item">
                         <Link to="/inspiration">Our Inspiration</Link>
                     </li>
+                    {/* <li className="nav-item">
+                        <Link to="/basic-carousel">carousel</Link>
+                    </li> */}
                 </ul>
             </div>
         </nav>

@@ -9,6 +9,7 @@ import Donate from './components/Donate/Donate.tsx';
 import Contact from './components/Contact/Contact.tsx';
 import { toast } from 'react-toastify';
 import Inspiration from './components/Inspiration/Inspiration.tsx';
+import BasicCarousel from './components/BasicCarousel/BasicCarousel.tsx';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
 					<Route path="/donate" element={<Donate/>} />
 					<Route path="/contact" element={<Contact/>} />
 					<Route path="/inspiration" element={<Inspiration/>} />
+					<Route path="/basic-carousel" element={<BasicCarousel/>} />
 					<Route path="*" element={<Home />} />
 				</Route>
 			</Routes>
