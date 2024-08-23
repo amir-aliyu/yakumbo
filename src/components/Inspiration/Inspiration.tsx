@@ -50,7 +50,6 @@ const Inspiration: React.FC = () => {
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
-                            // src="/images/IMG_3857.JPG" // Replace with the path to your image
                             src={img2}
                             alt="Second slide"
                         />
