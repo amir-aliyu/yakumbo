@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/yakumbo/static/css/main.3a3e1030.css",
+    "main.js": "/yakumbo/static/js/main.a888b4eb.js",
+    "static/media/banner-image.png": "/yakumbo/static/media/banner-image.a1d0cc262dd0ab2dc16a.png",
+    "index.html": "/yakumbo/index.html",
+    "main.3a3e1030.css.map": "/yakumbo/static/css/main.3a3e1030.css.map",
+    "main.a888b4eb.js.map": "/yakumbo/static/js/main.a888b4eb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3a3e1030.css",
+    "static/js/main.a888b4eb.js"
+  ]
+}
