@@ -23,3 +23,8 @@
     margin-bottom: 30px;
 }
 
+.smaller-image {
+    max-width: 60%; /* Adjust this percentage as needed */
+    height: auto;   /* Maintain aspect ratio */
+    margin: auto;   /* Center the image within its container */
+}
