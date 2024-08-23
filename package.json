@@ -13,8 +13,7 @@
       "test": "react-scripts test",
       "predeploy":"npm run build",
       "deploy":"gh-pages -d public/index.html",
-      "heroku-prebuild": "npm install && npm run build",
-      "install": "npm install && npm start"
+      "heroku-prebuild": "npm install && npm run build"
     },
     "dependencies": {
       "@emotion/css": "^11.11.2",
