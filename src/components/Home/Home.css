@@ -1,5 +1,5 @@
 .banner {
-    background: url('/root/images/banner-image.png') no-repeat center center;
+    background: url('/public/images/banner-image.png') no-repeat center center;
     background-size: cover;
     height: 300px;
     color: white;
