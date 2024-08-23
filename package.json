@@ -42,6 +42,7 @@
         "react-emotion": "^10.0.0",
         "react-hook-form": "^7.52.2",
         "react-scripts": "5.0.1",
+        "react-router-dom": "^6.26.1",
         "react-toastify": "^10.0.5",
         "web-vitals": "^2.1.4",
         "ws": "^8.17.1"
@@ -66,7 +67,6 @@
     },
     "devDependencies": {
         "@types/jquery": "^3.5.29",
-        "gh-pages": "^6.1.1",
-        "react-router-dom": "^6.26.1"
+        "gh-pages": "^6.1.1"
     }
 }
