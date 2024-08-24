@@ -7,6 +7,7 @@ import img2 from '../../assets/IMG_1003.jpg';
 import img3 from '../../assets/IMG_1004.jpg';
 import img4 from '../../assets/IMG_1004.jpg';
 import img5 from '../../assets/IMG_1004.jpg';
+import founderVideo from '../../assets/founderVideo.mp4';
 // import PlantForm from '../Form/PlantForm.tsx';
 //import test from 'node:test';
 
@@ -15,80 +16,79 @@ import img5 from '../../assets/IMG_1004.jpg';
 const Home = () => {
 
   return (
-    <div>
-     <div className="container mt-5">
-            <div className="row">
-                {/* About Us Section */}
-                {/* <div className="col-md-6 d-flex align-items-center"> */}
-                    {/* <img
-                        src={img4}
-                        alt="About Us"
-                        className="img-fluid rounded smaller-image"
-                        style={{ width: '100%', height: 'auto' }}
-                    /> */}
-                {/* </div> */}
-                <div id="about" className="col-md-6">
-                    <div className="section-title">
-                        <h2>About Us</h2>
-                    </div>
-                    <div className="section-content">
-                        <p>
-                            At Yakumbo Humanitarian Foundation, we believe that education and entrepreneurial skills are powerful tools for breaking the cycle of poverty. Inspired by firsthand experiences, we understand the transformative power of education in changing lives and uplifting communities.
-                        </p>
-                    </div>
-                {/* </div> */}
-            </div>
+    // <div>
+    //  <div className="container mt-5">
+    //         <div className="row">
+    //             <div id="about" className="col-md-6">
+    //                 <div className="section-title">
+    //                     <h2>About Us</h2>
+    //                 </div>
+    //                 <div className="section-content">
+    //                     <p>
+    //                         At Yakumbo Humanitarian Foundation, we believe that education and entrepreneurial skills are powerful tools for breaking the cycle of poverty. Inspired by firsthand experiences, we understand the transformative power of education in changing lives and uplifting communities.
+    //                     </p>
+    //                 </div>
+    //         </div>
     
 
-     {/* <div className="container bg-light"></div> */}
-            {/* <div className="row"> */}
-                {/* Our Message Section */}
-                <div id="message" className="col-md-6 bg-light">
-                    <div className="section-title">
-                        <h2>Our Message</h2>
-                    </div>
-                    <div className="section-content">
-                        <p>
-                            Our mission is to mobilize support and essential resources for disadvantaged, impoverished, and marginalized women in need. Join us in our commitment to empower women through meaningful vocational training and skill development, fostering a brighter future for all.
-                        </p>
-                    </div>
-                {/* </div> */}
-                {/* <div className="col-md-6 d-flex align-items-center">
-                    <img
-                        src={img5}
-                        alt="Our Message"
-                        className="img-fluid rounded smaller-image"
-                        style={{ width: '100%', height: 'auto' }}
-                    />
-                </div> */}
-            </div>
-        </div>
+    //             <div id="message" className="col-md-6 bg-light">
+    //                 <div className="section-title">
+    //                     <h2>Our Message</h2>
+    //                 </div>
+    //                 <div className="section-content">
+    //                     <p>
+    //                         Our mission is to mobilize support and essential resources for disadvantaged, impoverished, and marginalized women in need. Join us in our commitment to empower women through meaningful vocational training and skill development, fostering a brighter future for all.
+    //                     </p>
+    //                 </div>
+    //         </div>
+    //     </div>
+    //     </div>
+
+      <div>
+        <div className="container mt-5">
+      <div className="row">
+        
+        {/* About Us and Our Mission Section */}
+        <div id="about-mission" className="col-md-6">
+          <div className="section-title">
+            <h2>About Us</h2>
+          </div>
+          <div className="section-content">
+            <p>
+              At Yakumbo Humanitarian Foundation, we believe that education and entrepreneurial skills are powerful tools for breaking the cycle of poverty. Inspired by firsthand experiences, we understand the transformative power of education in changing lives and uplifting communities.
+            </p>
+          </div>
+          <div className="section-title mt-4">
+            <h2>Our Mission</h2>
+          </div>
+          <div className="section-content">
+            <p>
+              Our mission is to mobilize support and essential resources for disadvantaged, impoverished, and marginalized women in need. Join us in our commitment to empower women through meaningful vocational training and skill development, fostering a brighter future for all.
+            </p>
+          </div>
         </div>
 
-    {/* <div id="about" className="container">
-        <div className="section-title">
-          <h2>About Us</h2>
+        {/* Video Section */}
+        <div id="founder-video" className="col-md-6">
+          <div className="section-title">
+            <h2>Message from the CEO</h2>
+          </div>
+          <div className="video-content">
+            <video width="100%" controls>
+              <source src={founderVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div>
+            <center><h5>Binta W Aliyu</h5></center>
+          </div>
         </div>
-        <div className="row section-content">
-            <div className="col-md-12">
-              <p>At Yakumbo Humanitarian Foundation, we believe that education and entrepreneurial skills are powerful tools for breaking the cycle of poverty. Inspired by firsthand experiences, we understand the transformative power of education in changing lives and uplifting communities.</p>
-            </div>
         </div>
-    </div>
+        </div>
+  
 
-    <div id="message" className="container bg-light">
-        <div className="section-title">
-          <h2>Our Message</h2>
-        </div>
-        <div className="row section-content">
-            <div className="col-md-12">
-                <p>Our mission is to mobilize support and essential resources for disadvantaged, impoverished, and marginalized women in need.
-Join us in our commitment to empower women through meaningful vocational training and skill development, fostering a brighter future for all.</p>
-            </div>
-        </div>
-    </div> */}
 
-    <div id="projects" className="container">
+      <div id="projects" className="container">
         <div className="section-title">
           <h2>Projects</h2>
         </div>
